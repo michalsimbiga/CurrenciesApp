@@ -3,6 +3,9 @@ package com.currenciesapp.ui.rates
 import androidx.lifecycle.viewModelScope
 import com.currenciesapp.common.ui.KoinMvRxViewModelFactory
 import com.currenciesapp.common.ui.MvRxViewModel
+import com.currenciesapp.model.Currency
+import com.currenciesapp.model.CurrencyItem
+import com.currenciesapp.model.toItem
 import com.currenciesapp.useCase.GetRatesUseCase
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -14,10 +17,10 @@ class RatesViewModel(
 
     init {
         viewModelScope.launch {
-            getRatesUseCase.invoke(
+            getRatesUseCase.execute(
                 params = GetRatesUseCase.Params(currencyName = "EUR"),
-                onFailure = { Timber.i("TESTING currencies failure $it") },
-                onSuccess = { Timber.i("TESTING currencies $it") }
+                mapper = { it.map(Currency::toItem) },
+                stateReducer = { copy(currencyList = it) }
             )
         }
     }

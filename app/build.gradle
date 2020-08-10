@@ -49,6 +49,8 @@ dependencies {
 
     implementation Libraries.kotlin
 
+    implementation 'com.github.blongho:worldCountryData:1.5'
+
     implementation Libraries.appCompat
     implementation Libraries.coreKtx
     implementation Libraries.constraint
