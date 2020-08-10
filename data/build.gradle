@@ -10,6 +10,9 @@ dependencies {
 
     implementation Libraries.threeTen
 
+
+    implementation 'com.github.midorikocak:currency-picker-android:1.2.1'
+
     implementation Libraries.retrofit
     implementation Libraries.okHttpInterceptor
     implementation Libraries.okHttp

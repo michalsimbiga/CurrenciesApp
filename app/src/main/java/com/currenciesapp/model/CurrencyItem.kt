@@ -1,12 +1,14 @@
 package com.currenciesapp.model
 
 data class CurrencyItem(
-    val name: String,
+    val code: String,
+    val fullName: String,
     val rate: Float
 )
 
 fun Currency.toItem() =
     CurrencyItem(
-        name = name,
+        code = code,
+        fullName = fullName,
         rate = rate
     )

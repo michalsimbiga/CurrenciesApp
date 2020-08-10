@@ -14,9 +14,32 @@ class CurrencyRepositoryImpl(private val remoteDataSource: RemoteDataSource) : C
         safeCall {
             val listOfCurrencies: MutableList<CurrencyEntity> = mutableListOf()
             remoteDataSource.getRates(currencyName).rates.entries.forEach { currency ->
-                listOfCurrencies.add(CurrencyEntity(currency.key, currency.value))
+
+                listOfCurrencies.add(
+                    prepareCurrencyEntity(
+                        currencyCode = currency.key,
+                        currencyRate = currency.value
+                    )
+                )
             }
+            listOfCurrencies.add(FIST_INDEX, prepareCurrencyEntity(currencyName, DEFAULT_RATE))
+
             return@safeCall listOfCurrencies.map(CurrencyEntity::toDomain)
         }
+
+    private fun prepareCurrencyEntity(currencyCode: String, currencyRate: Float): CurrencyEntity {
+        val javaCurrency = java.util.Currency.getInstance(currencyCode)
+
+        return CurrencyEntity(
+            code = currencyCode,
+            rate = currencyRate,
+            fullName = javaCurrency.displayName
+        )
+    }
+
+    companion object {
+        private const val FIST_INDEX = 0
+        private const val DEFAULT_RATE = 1f
+    }
 
 }

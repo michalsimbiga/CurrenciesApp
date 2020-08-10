@@ -1,16 +1,14 @@
 package com.currenciesapp.ui.rates.view
 
 import android.content.Context
-import android.icu.util.Currency
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.graphics.drawable.toDrawable
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
-import com.blongho.country_data.World
-import com.bumptech.glide.Glide
 import com.currenciesapp.R
+import com.currenciesapp.common.extensions.zero
 import com.currenciesapp.model.CurrencyItem
+import com.mynameismidori.currencypicker.ExtendedCurrency
 import kotlinx.android.synthetic.main.fragment_rates_currency_item.view.*
 import timber.log.Timber
 
@@ -18,7 +16,7 @@ import timber.log.Timber
 class CurrencyItemView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+    defStyleAttr: Int = Int.zero
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     init {
@@ -26,20 +24,21 @@ class CurrencyItemView @JvmOverloads constructor(
     }
 
     @ModelProp
-    fun setCurrencyItem(currencyItem: CurrencyItem) {
-        val currency = java.util.Currency.getInstance(currencyItem.name)
+    fun setCurrencyItem(currency: CurrencyItem) {
 
-        val flagHelper = World.getFlagOf(currency.numericCode)
-        Timber.i("TESTING currencyFlag $flagHelper")
+        currencyName.text = currency.code
+        currencyFullName.text = currency.fullName
+        currencyRate.setText(currency.rate.toString())
 
-        currencyName.text = currency.currencyCode
-        currencyFullName.text = currency.displayName
-        currencyRate.setText(currencyItem.rate.toString())
+        val flag = ExtendedCurrency.getCurrencyByISO(currency.code)
 
-        currencyFlag.setImageResource(flagHelper)
+        Timber.i("TESTING currency ${flag}")
+
+        currencyFlag.setImageResource(flag.flag)
+//        currencyFlag.setImageResource(flagHelper)
 //
 //        Glide.with(context)
-//            .load(flagHelper)
+//            .load(flag)
 //            .centerCrop()
 //            .into(currencyFlag)
     }

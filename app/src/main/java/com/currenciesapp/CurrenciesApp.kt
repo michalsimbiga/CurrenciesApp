@@ -1,7 +1,6 @@
 package com.currenciesapp
 
 import android.app.Application
-import com.blongho.country_data.World
 import com.currenciesapp.common.lifecycleAnalytics.ActivityAnalyticsCallbacks
 import com.currenciesapp.common.lifecycleAnalytics.ActivityAnalyticsImpl
 import org.koin.android.ext.koin.androidContext
@@ -22,7 +21,6 @@ class CurrenciesApp : Application() {
         initKoin()
         setupLifecycleCallbacks()
         setupTimber()
-        setupWorldLibrary()
     }
 
     private fun initKoin() = startKoin {
@@ -35,10 +33,6 @@ class CurrenciesApp : Application() {
 
     private fun setupTimber() {
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
-    }
-
-    private fun setupWorldLibrary(){
-        World.init(applicationContext)
     }
 
     override fun onTerminate() {

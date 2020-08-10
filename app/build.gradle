@@ -49,7 +49,7 @@ dependencies {
 
     implementation Libraries.kotlin
 
-    implementation 'com.github.blongho:worldCountryData:1.5'
+    implementation 'com.github.midorikocak:currency-picker-android:1.2.1'
 
     implementation Libraries.appCompat
     implementation Libraries.coreKtx
