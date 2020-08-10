@@ -1,4 +1,7 @@
-package com.currenciesapp.common
+package com.currenciesapp.common.usecase
+
+import com.currenciesapp.common.Result
+import com.currenciesapp.error.MyError
 
 abstract class NoParameterUseCase<out Type> where Type : Any {
 
@@ -6,7 +9,7 @@ abstract class NoParameterUseCase<out Type> where Type : Any {
 
     suspend operator fun invoke(
         onSuccess: (Type) -> Unit = {},
-        onFailure: (CicError) -> Unit = {}
+        onFailure: (MyError) -> Unit = {}
     ) = when (val result = run()) {
         is Result.Success -> onSuccess(result.data)
         is Result.Failure -> onFailure(result.error)

@@ -1,13 +1,13 @@
 package com.currenciesapp.error
 
-import com.fieldcode.customerinformationcenter.domain.error.CicException
+import retrofit2.Response
 
 data class MyApiException(
     val code: Int,
     val url: String,
     override val message: String?,
     override val originalException: Throwable? = null
-) : CicException() {
+) : MyException() {
 
     constructor(response: Response<*>) : this(
         response.code(),

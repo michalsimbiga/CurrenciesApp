@@ -1,37 +1,36 @@
-package com.fieldcode.customerinformationcenter.domain.error
+package com.currenciesapp.error
 
-import com.currenciesapp.error.MyApiException
 import java.net.HttpURLConnection
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 private const val TOKEN_INVALID = "The provided token is already invalid"
 
-fun Throwable.toCicError() =
+fun Throwable.toMyError() =
     when (this) {
-        is MyApiException -> toCicError()
-        is SocketTimeoutException -> toCicError()
-        is UnknownHostException -> toCicError()
+        is MyApiException -> toMyError()
+        is SocketTimeoutException -> toMyError()
+        is UnknownHostException -> toMyError()
         else -> throw this
     }
 
-internal fun MyApiException.toCicError(): CicError = when {
-    code >= HttpURLConnection.HTTP_INTERNAL_ERROR -> CicError.ServerError(this)
-    code == HttpURLConnection.HTTP_BAD_REQUEST -> CicError.BadRequest(this)
+internal fun MyApiException.toMyError(): MyError = when {
+    code >= HttpURLConnection.HTTP_INTERNAL_ERROR -> MyError.ServerError(this)
+    code == HttpURLConnection.HTTP_BAD_REQUEST -> MyError.BadRequest(this)
     code == HttpURLConnection.HTTP_NOT_FOUND -> validateTokenMessage(this)
-    else -> CicError.ServerError(this)
+    else -> MyError.ServerError(this)
 }
 
-private fun validateTokenMessage(apiException: MyApiException): CicError {
+private fun validateTokenMessage(apiException: MyApiException): MyError {
     return if (apiException.message?.contains(TOKEN_INVALID, true) == true) {
-        CicError.TokenInvalid(apiException)
+        MyError.TokenInvalid(apiException)
     } else {
-        CicError.ServerError(apiException)
+        MyError.ServerError(apiException)
     }
 }
 
-internal fun SocketTimeoutException.toCicError(): CicError =
-    CicError.ConnectionNotEstablished(this)
+internal fun SocketTimeoutException.toMyError(): MyError =
+    MyError.ConnectionNotEstablished(this)
 
-internal fun UnknownHostException.toCicError(): CicError =
-    CicError.ConnectionNotEstablished(this)
+internal fun UnknownHostException.toMyError(): MyError =
+    MyError.ConnectionNotEstablished(this)

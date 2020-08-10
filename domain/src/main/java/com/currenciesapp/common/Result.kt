@@ -1,9 +1,12 @@
 package com.currenciesapp.common
 
+import com.currenciesapp.error.MyError
+import com.currenciesapp.error.toMyError
+
 sealed class Result<out T> {
 
     data class Success<out T>(val data: T) : Result<T>()
-    data class Failure(val error: CicError) : Result<Nothing>()
+    data class Failure(val error: MyError) : Result<Nothing>()
 
     operator fun invoke(): T? = (this as? Success)?.data
 }
@@ -26,5 +29,5 @@ inline fun <T> safeCall(call: () -> T): Result<T> =
     try {
         Result.Success(call.invoke())
     } catch (exception: Exception) {
-        Result.Failure(exception.toCicError())
+        Result.Failure(exception.toMyError())
     }
