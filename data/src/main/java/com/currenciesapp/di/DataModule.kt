@@ -2,7 +2,7 @@ package com.currenciesapp.di
 
 import com.currenciesapp.BASE_URL
 import com.currenciesapp.MAX_TIMEOUT
-import com.currenciesapp.RatesResponseConverterFactory
+//import com.currenciesapp.RatesResponseConverterFactory
 import com.currenciesapp.api.CurrencyApi
 import com.currenciesapp.dataSource.RemoteDataSource
 import com.currenciesapp.repository.CurrencyRepository
@@ -30,7 +30,7 @@ val dataModule = module {
 
     single {
         Retrofit.Builder()
-            .addConverterFactory(RatesResponseConverterFactory)
+//            .addConverterFactory(RatesResponseConverterFactory)
             .addConverterFactory(MoshiConverterFactory.create(get()))
             .baseUrl(BASE_URL)
             .client(get())
@@ -39,7 +39,7 @@ val dataModule = module {
 
     single { get<Retrofit>().create(CurrencyApi::class.java) }
 
-    single { RemoteDataSource() }
+    single { RemoteDataSource(currencyApi = get()) }
 
     single<CurrencyRepository> {
         CurrencyRepositoryImpl(

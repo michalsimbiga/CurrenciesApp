@@ -1,37 +1,98 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "30.0.0"
-
+    compileSdkVersion Versions.compileSDK
+    buildToolsVersion Versions.buildToolsVersion
     defaultConfig {
-        applicationId "com.currenciesapp"
-        minSdkVersion 23
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId ApplicationID.id
+        minSdkVersion Versions.minSDK
+        targetSdkVersion Versions.targetSDK
+        versionCode Releases.versionCode
+        versionName Releases.versionName
+        testInstrumentationRunner TestLibraries.customInstrumentationRunner
     }
-
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+    }
+    testOptions {
+        animationsDisabled = true
+
+        reportDir "$rootDir/reports/${project.getName()}"
+        resultsDir "$rootDir/reports/results/${project.getName()}"
+        unitTests.returnDefaultValues = true
+        unitTests.all {
+
+            reports {
+                junitXml.destination = file("$rootDir/reports/${project.getName()}")
+            }
+
+            jvmArgs '-XX:MaxPermSize=512m'
+            ignoreFailures true
+        }
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation project(Modules.domain)
+    implementation project(Modules.data)
 
+    implementation Libraries.kotlin
+
+    implementation Libraries.appCompat
+    implementation Libraries.coreKtx
+    implementation Libraries.constraint
+    implementation Libraries.swipeRefresh
+
+    implementation Libraries.koinAndroidX
+    implementation Libraries.koinViewModelAndroidX
+    implementation Libraries.mvrx
+
+    implementation Libraries.epoxy
+    implementation Libraries.epoxyGlide
+    kapt Libraries.epoxyKapt
+
+    implementation Libraries.firebaseAnalytics
+    implementation Libraries.firebaseCrashlytics
+
+    implementation Libraries.sqldelightAndroidDriver
+
+    implementation Libraries.threeTen
+
+    implementation Libraries.material
+
+    implementation Libraries.motionLib
+    implementation Libraries.maps
+
+    implementation Libraries.navigationFragmentKtx
+    implementation Libraries.navigationKtx
+
+    implementation Libraries.timber
+
+    debugImplementation Libraries.leakCanary
+
+    testImplementation TestLibraries.junit
+    testImplementation TestLibraries.assertjCore
+    testImplementation TestLibraries.mockk
+    testImplementation TestLibraries.mvrx
+    testImplementation TestLibraries.kotlinCoroutinesTest
+
+    debugImplementation TestLibraries.fragmentTesting
+
+    androidTestImplementation TestLibraries.espresso
+    androidTestImplementation TestLibraries.espressoIntents
+    androidTestImplementation TestLibraries.koin
+    androidTestImplementation TestLibraries.threetenabp
+    androidTestImplementation TestLibraries.extJunit
+    androidTestImplementation TestLibraries.awaitility
 }

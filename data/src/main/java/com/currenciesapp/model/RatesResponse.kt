@@ -2,7 +2,7 @@ package com.currenciesapp.model
 
 import com.squareup.moshi.Json
 
-data class RatesResponse<out T>(
-    @Json(name = "baseCurrency") val data: T?,
+data class RatesResponse(
+    @Json(name = "baseCurrency") val baseCurrency: String,
     @Json(name = "rates") val rates: Map<String, Float>
 )
