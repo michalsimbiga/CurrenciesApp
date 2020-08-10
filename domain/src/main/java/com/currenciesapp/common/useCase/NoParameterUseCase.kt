@@ -1,17 +1,16 @@
-package com.currenciesapp.common.usecase
+package com.currenciesapp.common.useCase
 
 import com.currenciesapp.common.Result
 import com.currenciesapp.error.MyError
 
-abstract class UseCase<out Type, in Params> where Type : Any {
+abstract class NoParameterUseCase<out Type> where Type : Any {
 
-    abstract suspend fun run(params: Params): Result<Type>
+    abstract suspend fun run(): Result<Type>
 
     suspend operator fun invoke(
-        params: Params,
         onSuccess: (Type) -> Unit = {},
         onFailure: (MyError) -> Unit = {}
-    ) = when (val result = run(params)) {
+    ) = when (val result = run()) {
         is Result.Success -> onSuccess(result.data)
         is Result.Failure -> onFailure(result.error)
     }
