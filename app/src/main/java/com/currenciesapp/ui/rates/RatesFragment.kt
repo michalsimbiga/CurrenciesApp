@@ -17,17 +17,27 @@ import com.currenciesapp.common.doNothing
 import com.currenciesapp.common.ui.BaseFragment
 import com.currenciesapp.ui.rates.view.CurrenccyUpdateWorker
 import kotlinx.android.synthetic.main.fragment_rates.*
+import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 class RatesFragment : BaseFragment() {
 
     private val viewModel: RatesViewModel by fragmentViewModel()
 
-    private lateinit var handler : Handler
+    private lateinit var handler: Handler
 
     private val epoxyController: RatesEpoxyController by lazy {
-        RatesEpoxyController()
+        RatesEpoxyController(
+            onCurrencySelectedCallback = ::onCurrencySelected,
+            onRateChangedCallback = ::onCurrencyRateChanged
+        )
     }
+
+    private fun onCurrencySelected(currencyName: String) =
+        viewModel.setNewBaseCurrency(currencyName)
+
+    private fun onCurrencyRateChanged(currencyRate: Float) =
+        viewModel.setNewRate(currencyRate)
 
     private val updateRatesTask = object : Runnable {
         override fun run() {
@@ -37,7 +47,13 @@ class RatesFragment : BaseFragment() {
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        if (state.currencyList is Success) epoxyController.setData(state.currencyList.invoke())
+        if (state.currencyList is Success) {
+            epoxyController.setData(
+                state.currencyList.invoke(),
+                state.currentCurrency.invoke(),
+                state.currentRate.invoke()
+            )
+        }
     }
 
     override fun onCreateView(

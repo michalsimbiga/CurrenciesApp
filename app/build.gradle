@@ -56,7 +56,6 @@ dependencies {
     implementation Libraries.appCompat
     implementation Libraries.coreKtx
     implementation Libraries.constraint
-    implementation Libraries.swipeRefresh
 
     implementation Libraries.koinAndroidX
     implementation Libraries.koinViewModelAndroidX

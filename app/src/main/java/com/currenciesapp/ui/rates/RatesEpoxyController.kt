@@ -1,19 +1,40 @@
 package com.currenciesapp.ui.rates
 
-import com.airbnb.epoxy.TypedEpoxyController
+import com.airbnb.epoxy.Typed3EpoxyController
 import com.currenciesapp.model.CurrencyItem
 import com.currenciesapp.ui.rates.view.currencyItemView
 
-class RatesEpoxyController() : TypedEpoxyController<List<CurrencyItem>>() {
+class RatesEpoxyController(
+    private var onCurrencySelectedCallback: ((String) -> Unit)?,
+    private var onRateChangedCallback: ((Float) -> Unit)?
+) : Typed3EpoxyController<List<CurrencyItem>, String, Float>() {
 
-    override fun buildModels(currencyList: List<CurrencyItem>?) {
+    private var focusedCurrency: String? = null
 
-        currencyList?.forEachIndexed { index, currency ->
+    override fun buildModels(
+        currencyList: List<CurrencyItem>?,
+        currentCurrency: String,
+        rate: Float
+    ) {
+        currencyList?.forEach { currency ->
             currencyItemView {
-                id(index)
-                currencyItem(currency)
+                id(currency.code)
+                defaultCurrency(currentCurrency == currency.code)
+                rate(rate)
+                currencyModel(currency)
+                onCurrencyNameChanged(::onCurrentlySelected)
+                onCurrencyRateChanged(onRateChangedCallback)
             }
         }
     }
 
+    private fun onCurrentlySelected(name: String?) {
+        focusedCurrency = name
+        onCurrencySelectedCallback?.invoke(name ?: return)
+    }
+
+    fun clearCallbacks() {
+        onCurrencySelectedCallback = null
+        onRateChangedCallback = null
+    }
 }

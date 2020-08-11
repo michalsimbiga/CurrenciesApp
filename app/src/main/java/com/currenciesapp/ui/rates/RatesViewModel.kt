@@ -21,6 +21,7 @@ class RatesViewModel(
 ) : MvRxViewModel<RatesViewState>(state) {
 
     init {
+        setNewRate(1f)
         updateRates()
     }
 
@@ -40,6 +41,14 @@ class RatesViewModel(
             )
         }
     }
+
+    fun setNewBaseCurrency(newCurrencyCode: String) = setState {
+        copy(currentCurrency = Success(newCurrencyCode))
+    }.also { Timber.i("TESTING newCurrency $newCurrencyCode") }
+
+    fun setNewRate(newRate: Float) = setState {
+        copy(currentRate = Success(newRate))
+    }.also { Timber.i("TESTING setNewRate $newRate") }
 
     companion object :
         KoinMvRxViewModelFactory<RatesViewModel, RatesViewState>(RatesViewModel::class)

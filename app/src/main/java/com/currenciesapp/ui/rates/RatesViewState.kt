@@ -7,5 +7,6 @@ import com.currenciesapp.model.CurrencyItem
 
 data class RatesViewState(
     val currencyList: Async<List<CurrencyItem>> = Uninitialized,
-    val currentCurrency: Async<String> = Uninitialized
+    val currentCurrency: Async<String> = Uninitialized,
+    val currentRate: Async<Float> = Uninitialized
 ) : MvRxState
