@@ -14,7 +14,6 @@ class CurrencyRepositoryImpl(private val remoteDataSource: RemoteDataSource) : C
         safeCall {
             val listOfCurrencies: MutableList<CurrencyEntity> = mutableListOf()
             remoteDataSource.getRates(currencyName).rates.entries.forEach { currency ->
-
                 listOfCurrencies.add(
                     prepareCurrencyEntity(
                         currencyCode = currency.key,

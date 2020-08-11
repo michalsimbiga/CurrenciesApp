@@ -51,6 +51,8 @@ dependencies {
 
     implementation 'com.github.midorikocak:currency-picker-android:1.2.1'
 
+    implementation "androidx.work:work-runtime-ktx:2.4.0"
+
     implementation Libraries.appCompat
     implementation Libraries.coreKtx
     implementation Libraries.constraint

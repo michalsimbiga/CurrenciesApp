@@ -5,4 +5,7 @@ import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Uninitialized
 import com.currenciesapp.model.CurrencyItem
 
-data class RatesViewState(val currencyList: Async<List<CurrencyItem>> = Uninitialized) : MvRxState
+data class RatesViewState(
+    val currencyList: Async<List<CurrencyItem>> = Uninitialized,
+    val currentCurrency: Async<String> = Uninitialized
+) : MvRxState

@@ -10,7 +10,6 @@ import com.currenciesapp.common.extensions.zero
 import com.currenciesapp.model.CurrencyItem
 import com.mynameismidori.currencypicker.ExtendedCurrency
 import kotlinx.android.synthetic.main.fragment_rates_currency_item.view.*
-import timber.log.Timber
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class CurrencyItemView @JvmOverloads constructor(
@@ -31,8 +30,6 @@ class CurrencyItemView @JvmOverloads constructor(
         currencyRate.setText(currency.rate.toString())
 
         val flag = ExtendedCurrency.getCurrencyByISO(currency.code)
-
-        Timber.i("TESTING currency ${flag}")
 
         currencyFlag.setImageResource(flag.flag)
 //        currencyFlag.setImageResource(flagHelper)
