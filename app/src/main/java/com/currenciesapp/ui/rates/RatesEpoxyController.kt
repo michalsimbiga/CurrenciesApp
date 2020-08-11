@@ -9,7 +9,6 @@ class RatesEpoxyController(
     private var onRateChangedCallback: ((Float) -> Unit)?
 ) : Typed3EpoxyController<List<CurrencyItem>, String, Float>() {
 
-    private var focusedCurrency: String? = null
 
     override fun buildModels(
         currencyList: List<CurrencyItem>?,
@@ -22,15 +21,10 @@ class RatesEpoxyController(
                 defaultCurrency(currentCurrency == currency.code)
                 rate(rate)
                 currencyModel(currency)
-                onCurrencyNameChanged(::onCurrentlySelected)
+                onCurrencyNameChanged(onCurrencySelectedCallback)
                 onCurrencyRateChanged(onRateChangedCallback)
             }
         }
-    }
-
-    private fun onCurrentlySelected(name: String?) {
-        focusedCurrency = name
-        onCurrencySelectedCallback?.invoke(name ?: return)
     }
 
     fun clearCallbacks() {

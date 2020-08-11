@@ -14,6 +14,7 @@ import com.currenciesapp.common.extensions.zero
 import com.currenciesapp.model.CurrencyItem
 import com.mynameismidori.currencypicker.ExtendedCurrency
 import kotlinx.android.synthetic.main.fragment_rates_currency_item.view.*
+import timber.log.Timber
 import kotlin.properties.Delegates
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
@@ -34,9 +35,6 @@ class CurrencyItemView @JvmOverloads constructor(
     var isDefaultCurrency by Delegates.notNull<Boolean>()
         @ModelProp set
 
-    var isFocusedCurrency by Delegates.notNull<Boolean>()
-        @ModelProp set
-
     init {
         inflate(context, R.layout.fragment_rates_currency_item, this)
     }
@@ -47,13 +45,16 @@ class CurrencyItemView @JvmOverloads constructor(
     fun setupView() = executeWithoutUserManipulation {
         currencyName.text = currencyModel.code
         currencyFullName.text = currencyModel.fullName
-        if (isDefaultCurrency.not()) currencyRate.setText(calculatePrice().toString())
 
-        if (isFocusedCurrency) currencyRate.requestFocus()
+        if (isDefaultCurrency.not()) currencyRate.setText(calculatePrice().toString())
 
         val extendedCurrency = ExtendedCurrency.getCurrencyByISO(currencyModel.code)
         currencyFlag.setImageResource(extendedCurrency.flag)
 
+        setImeButtonAction()
+    }
+
+    private fun setImeButtonAction() {
         currencyRate.setOnEditorActionListener { _, actionId, _ ->
             when (actionId) {
                 EditorInfo.IME_ACTION_DONE,
@@ -96,5 +97,6 @@ class CurrencyItemView @JvmOverloads constructor(
     @OnViewRecycled
     fun onViewRecycled() {
         clearFocus()
+        currencyRate.setText(rate.toString())
     }
 }

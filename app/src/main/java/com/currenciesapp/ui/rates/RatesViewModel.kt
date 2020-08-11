@@ -22,6 +22,7 @@ class RatesViewModel(
 
     init {
         setNewRate(1f)
+        setNewBaseCurrency("EUR")
         updateRates()
     }
 
@@ -29,15 +30,10 @@ class RatesViewModel(
         viewModelScope.launch {
             getRatesUseCase.execute(
                 params = GetRatesUseCase.Params(
-                    currencyName = state.currentCurrency.invoke() ?: "EUR"
+                    currencyName = state.currentCurrency.invoke().toString()
                 ),
                 mapper = { it.map(Currency::toItem) },
-                stateReducer = {
-                    copy(
-                        currencyList = it,
-                        currentCurrency = Success(it.invoke()?.first()?.code ?: "EUR")
-                    )
-                }
+                stateReducer = { copy(currencyList = it) }
             )
         }
     }
