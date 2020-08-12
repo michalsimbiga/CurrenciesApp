@@ -7,6 +7,6 @@
     <fragment
         android:id="@+id/ratesFragment"
         android:name="com.currenciesapp.ui.rates.RatesFragment"
-        android:label=""/>
+        android:label="Rates"/>
 
 </navigation>

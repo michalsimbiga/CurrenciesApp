@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="72dp">
+    android:layout_height="@dimen/fragment_rates_currency_item_height">
 
     <ImageView
         android:id="@+id/currencyFlag"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_margin="16dp"
+        android:layout_width="@dimen/fragment_rates_currency_flag_width"
+        android:layout_height="@dimen/fragment_rates_currency_flag_height"
+        android:layout_margin="@dimen/margin_medium_16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         style="@style/CurrencyCode"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="@dimen/margin_medium_16dp"
         app:layout_constraintStart_toEndOf="@id/currencyFlag"
         app:layout_constraintTop_toTopOf="@id/currencyFlag"
         tools:text="Eur" />
@@ -29,7 +29,7 @@
         android:id="@+id/currencyFullName"
         android:layout_width="wrap_content"
         style="@style/CurrencyFullName"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="@id/currencyFlag"
         app:layout_constraintStart_toStartOf="@id/currencyName"
         app:layout_constraintTop_toBottomOf="@id/currencyName"
@@ -37,11 +37,11 @@
 
     <EditText
         android:id="@+id/currencyRate"
-        android:layout_width="98dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_margin="16dp"
+        android:layout_margin="@dimen/margin_medium_16dp"
         android:imeOptions="actionDone"
-        android:text="1"
+        android:text="@string/default_volume"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -9,7 +9,6 @@ class RatesEpoxyController(
     private var onVolumeChangedCallback: ((Float) -> Unit)?
 ) : Typed3EpoxyController<List<CurrencyItem>, String, Float>() {
 
-
     override fun buildModels(
         currencyList: List<CurrencyItem>?,
         currentCurrency: String,

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">CurrenciesApp</string>
+
+    <string name="default_volume">1</string>
 </resources>

@@ -1,19 +1,15 @@
 package com.currenciesapp.ui.rates
 
 import androidx.lifecycle.viewModelScope
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkRequest
 import com.airbnb.mvrx.Success
+import com.currenciesapp.DEFAULT_CURRENCY
+import com.currenciesapp.DEFAULT_VOLUME
 import com.currenciesapp.common.ui.KoinMvRxViewModelFactory
 import com.currenciesapp.common.ui.MvRxViewModel
 import com.currenciesapp.model.Currency
-import com.currenciesapp.model.CurrencyItem
 import com.currenciesapp.model.toItem
-import com.currenciesapp.ui.rates.view.CurrenccyUpdateWorker
 import com.currenciesapp.useCase.GetRatesUseCase
 import kotlinx.coroutines.launch
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class RatesViewModel(
     state: RatesViewState,
@@ -21,8 +17,8 @@ class RatesViewModel(
 ) : MvRxViewModel<RatesViewState>(state) {
 
     init {
-        setNewRate(1f)
-        setNewBaseCurrency("EUR")
+        setNewRate(DEFAULT_VOLUME)
+        setNewBaseCurrency(DEFAULT_CURRENCY)
         updateRates()
     }
 
@@ -40,11 +36,9 @@ class RatesViewModel(
 
     fun setNewBaseCurrency(newCurrencyCode: String) = setState {
         copy(currentCurrency = Success(newCurrencyCode))
-    }.also { Timber.i("TESTING newCurrency $newCurrencyCode") }
+    }
 
-    fun setNewRate(newRate: Float) = setState {
-        copy(currentRate = Success(newRate))
-    }.also { Timber.i("TESTING setNewRate $newRate") }
+    fun setNewRate(newRate: Float) = setState { copy(currentRate = Success(newRate)) }
 
     companion object :
         KoinMvRxViewModelFactory<RatesViewModel, RatesViewState>(RatesViewModel::class)

@@ -6,7 +6,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.UniqueOnly
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
@@ -15,6 +14,7 @@ import com.currenciesapp.UPDATE_TIME_1_SEC
 import com.currenciesapp.common.doNothing
 import com.currenciesapp.common.ui.BaseFragment
 import kotlinx.android.synthetic.main.fragment_rates.*
+import timber.log.Timber
 
 class RatesFragment : BaseFragment() {
 
@@ -49,7 +49,9 @@ class RatesFragment : BaseFragment() {
                 currentCurrency.invoke(),
                 currentRate.invoke()
             )
+            Timber.i("TESTING rate ${currentRate.invoke()} ${currentRate.invoke()}")
         }
+
     }
 
     override fun invalidate() = doNothing
@@ -61,6 +63,7 @@ class RatesFragment : BaseFragment() {
     ): View? = inflater.inflate(R.layout.fragment_rates, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        epoxyController.onRestoreInstanceState(savedInstanceState)
         ratesRecycler.setController(epoxyController)
 
         handler = Handler(Looper.getMainLooper())
@@ -70,10 +73,16 @@ class RatesFragment : BaseFragment() {
             asyncProp = RatesViewState::currencyList,
             deliveryMode = UniqueOnly(subscriptionId = "SubscribtioIn"),
             onSuccess = { updateRecycler() },
-            onFail = {}
+            onFail = { Timber.i("TESTING failure $it")}
         )
 
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        epoxyController.onSaveInstanceState(outState)
+
+        super.onSaveInstanceState(outState)
     }
 
     override fun onResume() {

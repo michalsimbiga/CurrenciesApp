@@ -14,9 +14,10 @@ import com.currenciesapp.common.extensions.zero
 import com.currenciesapp.model.CurrencyItem
 import com.mynameismidori.currencypicker.ExtendedCurrency
 import kotlinx.android.synthetic.main.fragment_rates_currency_item.view.*
+import timber.log.Timber
 import kotlin.properties.Delegates
 
-@ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
+@ModelView(saveViewState = true, autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class CurrencyItemView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -38,7 +39,7 @@ class CurrencyItemView @JvmOverloads constructor(
         inflate(context, R.layout.fragment_rates_currency_item, this)
     }
 
-    private fun calculatePrice() = currencyModel.rate * volume
+    private fun calculatePrice() = (currencyModel.rate * volume)
 
     @AfterPropsSet
     fun setupView() = executeWithoutUserManipulation {
@@ -68,7 +69,8 @@ class CurrencyItemView @JvmOverloads constructor(
         }
     }
 
-    private fun updateVolume() = currencyRate.setText(currencyRate.text)
+    private fun updateVolume() =
+        executeWithoutUserManipulation { currencyRate.setText(currencyRate.text) }
 
     @CallbackProp
     fun onCurrencyChanged(currencyChangedCallback: ((String) -> Unit)?) {

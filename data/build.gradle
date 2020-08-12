@@ -10,7 +10,6 @@ dependencies {
 
     implementation Libraries.threeTen
 
-
     implementation Libraries.retrofit
     implementation Libraries.okHttpInterceptor
     implementation Libraries.okHttp
