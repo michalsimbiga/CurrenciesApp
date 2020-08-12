@@ -5,30 +5,30 @@ import com.currenciesapp.model.CurrencyItem
 import com.currenciesapp.ui.rates.view.currencyItemView
 
 class RatesEpoxyController(
-    private var onCurrencySelectedCallback: ((String) -> Unit)?,
-    private var onRateChangedCallback: ((Float) -> Unit)?
+    private var onCurrencyChangedCallback: ((String) -> Unit)?,
+    private var onVolumeChangedCallback: ((Float) -> Unit)?
 ) : Typed3EpoxyController<List<CurrencyItem>, String, Float>() {
 
 
     override fun buildModels(
         currencyList: List<CurrencyItem>?,
         currentCurrency: String,
-        rate: Float
+        newVolume: Float
     ) {
         currencyList?.forEach { currency ->
             currencyItemView {
                 id(currency.code)
                 defaultCurrency(currentCurrency == currency.code)
-                rate(rate)
+                volume(newVolume)
                 currencyModel(currency)
-                onCurrencyNameChanged(onCurrencySelectedCallback)
-                onCurrencyRateChanged(onRateChangedCallback)
+                onCurrencyChanged(onCurrencyChangedCallback)
+                onVolumeChanged(onVolumeChangedCallback)
             }
         }
     }
 
     fun clearCallbacks() {
-        onCurrencySelectedCallback = null
-        onRateChangedCallback = null
+        onCurrencyChangedCallback = null
+        onVolumeChangedCallback = null
     }
 }

@@ -14,7 +14,6 @@ import com.currenciesapp.common.extensions.zero
 import com.currenciesapp.model.CurrencyItem
 import com.mynameismidori.currencypicker.ExtendedCurrency
 import kotlinx.android.synthetic.main.fragment_rates_currency_item.view.*
-import timber.log.Timber
 import kotlin.properties.Delegates
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
@@ -29,7 +28,7 @@ class CurrencyItemView @JvmOverloads constructor(
     lateinit var currencyModel: CurrencyItem
         @ModelProp set
 
-    var rate by Delegates.notNull<Float>()
+    var volume by Delegates.notNull<Float>()
         @ModelProp set
 
     var isDefaultCurrency by Delegates.notNull<Boolean>()
@@ -39,17 +38,18 @@ class CurrencyItemView @JvmOverloads constructor(
         inflate(context, R.layout.fragment_rates_currency_item, this)
     }
 
-    private fun calculatePrice() = currencyModel.rate * rate
+    private fun calculatePrice() = currencyModel.rate * volume
 
     @AfterPropsSet
     fun setupView() = executeWithoutUserManipulation {
-        currencyName.text = currencyModel.code
-        currencyFullName.text = currencyModel.fullName
-
         if (isDefaultCurrency.not()) currencyRate.setText(calculatePrice().toString())
 
-        val extendedCurrency = ExtendedCurrency.getCurrencyByISO(currencyModel.code)
-        currencyFlag.setImageResource(extendedCurrency.flag)
+        with(currencyModel) {
+            currencyName.text = code
+            currencyFullName.text = fullName
+            val extendedCurrency = ExtendedCurrency.getCurrencyByISO(code)
+            currencyFlag.setImageResource(extendedCurrency.flag)
+        }
 
         setImeButtonAction()
     }
@@ -68,22 +68,24 @@ class CurrencyItemView @JvmOverloads constructor(
         }
     }
 
+    private fun updateVolume() = currencyRate.setText(currencyRate.text)
+
     @CallbackProp
-    fun onCurrencyNameChanged(callback: ((String) -> Unit)?) {
-        currencyRate.setOnFocusChangeListener { view, hasFocus ->
-            if (hasFocus) callback?.invoke(currencyModel.code)
+    fun onCurrencyChanged(currencyChangedCallback: ((String) -> Unit)?) {
+        currencyRate.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) currencyChangedCallback?.invoke(currencyModel.code)
+                .also { updateVolume() }
         }
     }
 
     @CallbackProp
-    fun onCurrencyRateChanged(newRateCallback: ((Float) -> Unit)?) =
+    fun onVolumeChanged(onVolumeChangedCallback: ((Float) -> Unit)?) =
         currencyRate.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(p0: Editable?) = doNothing
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = doNothing
-
             override fun onTextChanged(newText: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 if (userManipulation && newText.isNullOrBlank().not()) {
-                    newRateCallback?.invoke(newText.toString().toFloat())
+                    onVolumeChangedCallback?.invoke(newText.toString().toFloat())
                 }
             }
         })
@@ -97,6 +99,6 @@ class CurrencyItemView @JvmOverloads constructor(
     @OnViewRecycled
     fun onViewRecycled() {
         clearFocus()
-        currencyRate.setText(rate.toString())
+        currencyRate.setText(volume.toString())
     }
 }

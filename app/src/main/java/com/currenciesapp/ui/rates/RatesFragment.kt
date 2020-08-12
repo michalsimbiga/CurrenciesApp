@@ -6,19 +6,15 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.WorkRequest
 import com.airbnb.mvrx.Success
+import com.airbnb.mvrx.UniqueOnly
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.currenciesapp.R
+import com.currenciesapp.UPDATE_TIME_1_SEC
 import com.currenciesapp.common.doNothing
 import com.currenciesapp.common.ui.BaseFragment
-import com.currenciesapp.ui.rates.view.CurrenccyUpdateWorker
 import kotlinx.android.synthetic.main.fragment_rates.*
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
 
 class RatesFragment : BaseFragment() {
 
@@ -28,9 +24,16 @@ class RatesFragment : BaseFragment() {
 
     private val epoxyController: RatesEpoxyController by lazy {
         RatesEpoxyController(
-            onCurrencySelectedCallback = ::onCurrencySelected,
-            onRateChangedCallback = ::onCurrencyRateChanged
+            onCurrencyChangedCallback = ::onCurrencySelected,
+            onVolumeChangedCallback = ::onCurrencyRateChanged
         )
+    }
+
+    private val updateRatesTask = object : Runnable {
+        override fun run() {
+            viewModel.updateRates()
+            handler.postDelayed(this, UPDATE_TIME_1_SEC)
+        }
     }
 
     private fun onCurrencySelected(currencyName: String) =
@@ -39,22 +42,17 @@ class RatesFragment : BaseFragment() {
     private fun onCurrencyRateChanged(currencyRate: Float) =
         viewModel.setNewRate(currencyRate)
 
-    private val updateRatesTask = object : Runnable {
-        override fun run() {
-            viewModel.updateRates()
-            handler.postDelayed(this, 1000)
-        }
-    }
-
-    override fun invalidate() = withState(viewModel) { state ->
-        if (state.currencyList is Success) {
+    private fun updateRecycler() = withState(viewModel) { state ->
+        with(state) {
             epoxyController.setData(
-                state.currencyList.invoke(),
-                state.currentCurrency.invoke(),
-                state.currentRate.invoke()
+                currencyList.invoke(),
+                currentCurrency.invoke(),
+                currentRate.invoke()
             )
         }
     }
+
+    override fun invalidate() = doNothing
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -66,6 +64,14 @@ class RatesFragment : BaseFragment() {
         ratesRecycler.setController(epoxyController)
 
         handler = Handler(Looper.getMainLooper())
+
+        viewModel.asyncSubscribe(
+            owner = viewLifecycleOwner,
+            asyncProp = RatesViewState::currencyList,
+            deliveryMode = UniqueOnly(subscriptionId = "SubscribtioIn"),
+            onSuccess = { updateRecycler() },
+            onFail = {}
+        )
 
         super.onViewCreated(view, savedInstanceState)
     }
@@ -80,5 +86,17 @@ class RatesFragment : BaseFragment() {
         super.onPause()
 
         handler.removeCallbacks(updateRatesTask)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        onRecyclerViewDetached(ratesRecycler)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        epoxyController.clearCallbacks()
     }
 }
