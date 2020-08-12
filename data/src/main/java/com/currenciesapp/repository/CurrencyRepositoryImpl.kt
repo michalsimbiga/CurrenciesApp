@@ -1,7 +1,6 @@
 package com.currenciesapp.repository
 
 import com.currenciesapp.common.Result
-import com.currenciesapp.common.extensions.bodyOrException
 import com.currenciesapp.common.safeCall
 import com.currenciesapp.dataSource.RemoteDataSource
 import com.currenciesapp.model.Currency
@@ -40,5 +39,4 @@ class CurrencyRepositoryImpl(private val remoteDataSource: RemoteDataSource) : C
         private const val FIST_INDEX = 0
         private const val DEFAULT_RATE = 1f
     }
-
 }

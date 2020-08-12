@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import com.currenciesapp.common.lifecycleAnalytics.FragmentAnalytics
 
 class FragmentAnalyticsCallbacks(private val fragmentAnalytics: FragmentAnalytics) :
     FragmentManager.FragmentLifecycleCallbacks() {

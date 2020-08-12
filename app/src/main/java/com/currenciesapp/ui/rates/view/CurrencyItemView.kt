@@ -1,20 +1,21 @@
 package com.currenciesapp.ui.rates.view
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
-import com.airbnb.epoxy.*
+import androidx.core.widget.doOnTextChanged
+import com.airbnb.epoxy.AfterPropsSet
+import com.airbnb.epoxy.CallbackProp
+import com.airbnb.epoxy.ModelProp
+import com.airbnb.epoxy.ModelView
+import com.airbnb.epoxy.OnViewRecycled
 import com.currenciesapp.R
-import com.currenciesapp.common.doNothing
 import com.currenciesapp.common.extensions.hideKeyboard
 import com.currenciesapp.common.extensions.zero
 import com.currenciesapp.model.CurrencyItem
 import com.mynameismidori.currencypicker.ExtendedCurrency
 import kotlinx.android.synthetic.main.fragment_rates_currency_item.view.*
-import timber.log.Timber
 import kotlin.properties.Delegates
 
 @ModelView(saveViewState = true, autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
@@ -25,7 +26,7 @@ class CurrencyItemView @JvmOverloads constructor(
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
     private val userManipulation
-            get() = currencyRate.hasFocus()
+        get() = currencyRate.hasFocus()
 
     lateinit var currencyModel: CurrencyItem
         @ModelProp set
@@ -75,22 +76,18 @@ class CurrencyItemView @JvmOverloads constructor(
     @CallbackProp
     fun onCurrencyChanged(currencyChangedCallback: ((String) -> Unit)?) {
         currencyRate.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) currencyChangedCallback?.invoke(currencyModel.code).also { updateVolume() }
+            if (hasFocus) currencyChangedCallback?.invoke(currencyModel.code)
+                .also { updateVolume() }
         }
     }
 
     @CallbackProp
     fun onVolumeChanged(onVolumeChangedCallback: ((Float) -> Unit)?) =
-        currencyRate.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(p0: Editable?) = doNothing
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = doNothing
-            override fun onTextChanged(newText: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (userManipulation  && newText.isNullOrBlank().not()) {
-                    Timber.i("TESTING onVolumeChanged ${currencyModel.code} $volume")
-                    onVolumeChangedCallback?.invoke(newText.toString().toFloat())
-                }
+        currencyRate.doOnTextChanged { text, _, _, _ ->
+            if (userManipulation && text.isNullOrBlank().not()) {
+                onVolumeChangedCallback?.invoke(text.toString().toFloat())
             }
-        })
+        }
 
     @OnViewRecycled
     fun onViewRecycled() {

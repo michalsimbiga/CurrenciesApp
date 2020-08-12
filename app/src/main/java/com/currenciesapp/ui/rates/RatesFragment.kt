@@ -14,10 +14,7 @@ import com.currenciesapp.UPDATE_TIME_1_SEC
 import com.currenciesapp.common.doNothing
 import com.currenciesapp.common.ui.BaseFragment
 import com.currenciesapp.error.MyError
-import com.currenciesapp.error.MyException
-import com.currenciesapp.error.toMyError
 import kotlinx.android.synthetic.main.fragment_rates.*
-import timber.log.Timber
 
 class RatesFragment : BaseFragment() {
 

@@ -1,7 +1,11 @@
 package com.currenciesapp.common.ui
 
-import com.airbnb.mvrx.*
-import com.currenciesapp.common.useCase.NoParameterUseCase
+import com.airbnb.mvrx.Async
+import com.airbnb.mvrx.BaseMvRxViewModel
+import com.airbnb.mvrx.BuildConfig
+import com.airbnb.mvrx.Fail
+import com.airbnb.mvrx.MvRxState
+import com.airbnb.mvrx.Success
 import com.currenciesapp.common.useCase.UseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,5 +36,4 @@ abstract class MvRxViewModel<State : MvRxState>(
             onFailure = { setState { stateReducer(Fail(it)) } }
         )
     }
-
 }

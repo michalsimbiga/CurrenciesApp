@@ -1,18 +1,11 @@
 package com.currenciesapp.common.ui
 
 import android.view.View
-import androidx.annotation.IdRes
 import androidx.annotation.StringRes
-import androidx.navigation.NavDirections
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.BaseMvRxFragment
 import com.currenciesapp.common.doNothing
-import com.currenciesapp.common.extensions.inputMethodManager
-import com.currenciesapp.common.extensions.zero
 import com.currenciesapp.ui.main.MainActivity
-import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.*
 
 abstract class BaseFragment : BaseMvRxFragment() {
 
