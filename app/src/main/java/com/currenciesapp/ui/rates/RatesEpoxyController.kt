@@ -12,13 +12,13 @@ class RatesEpoxyController(
     override fun buildModels(
         currencyList: List<CurrencyItem>?,
         currentCurrency: String,
-        newVolume: Float
+        volume: Float
     ) {
         currencyList?.forEach { currency ->
             currencyItemView {
                 id(currency.code)
                 defaultCurrency(currentCurrency == currency.code)
-                volume(newVolume)
+                volume(volume)
                 currencyModel(currency)
                 onCurrencyChanged(onCurrencyChangedCallback)
                 onVolumeChanged(onVolumeChangedCallback)
