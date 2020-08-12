@@ -5,11 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/fragment_rates_currency_item_height">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/currencyFlag"
         android:layout_width="@dimen/fragment_rates_currency_flag_width"
         android:layout_height="@dimen/fragment_rates_currency_flag_height"
         android:layout_margin="@dimen/margin_medium_16dp"
+        app:civ_border_width="@dimen/fragment_rates_currency_flag_border_width"
+        app:civ_border_color="@android:color/darker_gray"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -37,7 +39,7 @@
 
     <EditText
         android:id="@+id/currencyRate"
-        android:layout_width="wrap_content"
+        android:layout_width="@dimen/fragment_rates_currency_rate_width"
         android:layout_height="0dp"
         android:layout_margin="@dimen/margin_medium_16dp"
         android:imeOptions="actionDone"

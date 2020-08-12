@@ -46,6 +46,7 @@ class CurrencyItemView @JvmOverloads constructor(
     @AfterPropsSet
     fun setupView() {
         if (isDefaultCurrency.not()) currencyRate.setText(calculatePrice().toString())
+        else currencyRate.requestFocus()
 
         with(currencyModel) {
             currencyName.text = code
@@ -71,13 +72,17 @@ class CurrencyItemView @JvmOverloads constructor(
         }
     }
 
-    private fun updateVolume() = currencyRate.setText(currencyRate.text)
+    private fun updateVolume() {
+        currencyRate.text = currencyRate.text
+    }
 
     @CallbackProp
     fun onCurrencyChanged(currencyChangedCallback: ((String) -> Unit)?) {
         currencyRate.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) currencyChangedCallback?.invoke(currencyModel.code)
-                .also { updateVolume() }
+            if (hasFocus) {
+                currencyChangedCallback?.invoke(currencyModel.code)
+                updateVolume()
+            }
         }
     }
 

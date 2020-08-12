@@ -51,6 +51,7 @@ dependencies {
     implementation Libraries.kotlin
 
     implementation Libraries.currencyPicker
+    implementation Libraries.circleImageView
 
     implementation Libraries.appCompat
     implementation Libraries.coreKtx

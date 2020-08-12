@@ -61,6 +61,8 @@ object Versions {
     val ktlint = "0.29.0"
 
     val currencyPicker = "1.2.1"
+
+    val circleImageView = "3.1.0"
 }
 
 object Libraries {
@@ -101,6 +103,8 @@ object Libraries {
     val ktlint = "com.github.shyiko:ktlint:${Versions.ktlint}"
 
     val currencyPicker = "com.github.midorikocak:currency-picker-android:${Versions.currencyPicker}"
+
+    val circleImageView =  "de.hdodenhof:circleimageview:${Versions.circleImageView}"
 }
 
 object TestLibraries {
