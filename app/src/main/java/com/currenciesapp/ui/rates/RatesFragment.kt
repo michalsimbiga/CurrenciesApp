@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.currenciesapp.ui.rates
 
 import android.os.Bundle
@@ -53,12 +55,11 @@ class RatesFragment : BaseFragment() {
     }
 
     private fun handleError(error: Throwable?) = when (error) {
-        is MyError.ConnectionNotEstablished -> {
-            showSnackbar(R.string.fragment_token_connection_error_message, true)
-        }
-        else -> {
-            hideSnack()
-        }
+        is MyError.ConnectionNotEstablished -> showSnackbar(
+            R.string.fragment_token_connection_error_message,
+            true
+        )
+        else -> hideSnack()
     }
 
     override fun invalidate() = doNothing
@@ -78,7 +79,7 @@ class RatesFragment : BaseFragment() {
         viewModel.asyncSubscribe(
             owner = viewLifecycleOwner,
             asyncProp = RatesViewState::currencyList,
-            deliveryMode = UniqueOnly(subscriptionId = "SubscribtioIn"),
+            deliveryMode = UniqueOnly(subscriptionId = CURRENCY_SUBSCRIPTION_ID),
             onSuccess = { updateRecycler().also { hideSnack() } },
             onFail = { handleError(it) }
         )
@@ -114,5 +115,9 @@ class RatesFragment : BaseFragment() {
         super.onDestroy()
 
         epoxyController.clearCallbacks()
+    }
+
+    companion object {
+        private const val CURRENCY_SUBSCRIPTION_ID = "CurrencySubscriptionId"
     }
 }
