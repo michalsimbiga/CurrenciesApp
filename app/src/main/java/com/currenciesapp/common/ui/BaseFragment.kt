@@ -22,12 +22,4 @@ abstract class BaseFragment : BaseMvRxFragment() {
                 doNothing
         })
     }
-
-    fun navigate(action: NavDirections) = findNavController().navigate(action)
-
-    fun navigate(@IdRes resId: Int) = findNavController().navigate(resId)
-
-    fun hideKeyboard() =
-        requireContext().inputMethodManager.hideSoftInputFromWindow(view?.windowToken, Int.zero)
-
 }

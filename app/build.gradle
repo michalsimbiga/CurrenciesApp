@@ -13,7 +13,7 @@ android {
         targetSdkVersion Versions.targetSDK
         versionCode Releases.versionCode
         versionName Releases.versionName
-        testInstrumentationRunner TestLibraries.customInstrumentationRunner
+        testInstrumentationRunner Versions.instrumentationRunner
     }
     buildTypes {
         release {
@@ -49,9 +49,7 @@ dependencies {
 
     implementation Libraries.kotlin
 
-    implementation 'com.github.midorikocak:currency-picker-android:1.2.1'
-
-    implementation "androidx.work:work-runtime-ktx:2.4.0"
+    implementation Libraries.currencyPicker
 
     implementation Libraries.appCompat
     implementation Libraries.coreKtx
@@ -62,20 +60,9 @@ dependencies {
     implementation Libraries.mvrx
 
     implementation Libraries.epoxy
-    implementation Libraries.epoxyGlide
     kapt Libraries.epoxyKapt
 
-    implementation Libraries.firebaseAnalytics
-    implementation Libraries.firebaseCrashlytics
-
-    implementation Libraries.sqldelightAndroidDriver
-
-    implementation Libraries.threeTen
-
     implementation Libraries.material
-
-    implementation Libraries.motionLib
-    implementation Libraries.maps
 
     implementation Libraries.navigationFragmentKtx
     implementation Libraries.navigationKtx
@@ -90,12 +77,6 @@ dependencies {
     testImplementation TestLibraries.mvrx
     testImplementation TestLibraries.kotlinCoroutinesTest
 
-    debugImplementation TestLibraries.fragmentTesting
-
-    androidTestImplementation TestLibraries.espresso
-    androidTestImplementation TestLibraries.espressoIntents
     androidTestImplementation TestLibraries.koin
-    androidTestImplementation TestLibraries.threetenabp
     androidTestImplementation TestLibraries.extJunit
-    androidTestImplementation TestLibraries.awaitility
 }

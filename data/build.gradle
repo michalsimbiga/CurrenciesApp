@@ -11,20 +11,16 @@ dependencies {
     implementation Libraries.threeTen
 
 
-    implementation 'com.github.midorikocak:currency-picker-android:1.2.1'
-
     implementation Libraries.retrofit
     implementation Libraries.okHttpInterceptor
     implementation Libraries.okHttp
     implementation Libraries.moshi
     implementation Libraries.moshiKotlin
     implementation Libraries.moshiConverter
-    implementation Libraries.sqldelightAndroidDriver
 
     testImplementation TestLibraries.junit
     testImplementation TestLibraries.mockk
     testImplementation TestLibraries.kotlinCoroutinesTest
 
-    testImplementation TestLibraries.sqldelightSqliteDriver
     testImplementation TestLibraries.threetenabp
 }
