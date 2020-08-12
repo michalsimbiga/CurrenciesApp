@@ -2,4 +2,8 @@
     <string name="app_name">CurrenciesApp</string>
 
     <string name="default_volume">1</string>
+
+    <!--  Error Messages  -->
+    <string name="fragment_token_connection_error_message">Please check your internet connection and try again</string>
+
 </resources>

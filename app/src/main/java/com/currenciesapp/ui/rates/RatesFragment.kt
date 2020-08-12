@@ -13,6 +13,9 @@ import com.currenciesapp.R
 import com.currenciesapp.UPDATE_TIME_1_SEC
 import com.currenciesapp.common.doNothing
 import com.currenciesapp.common.ui.BaseFragment
+import com.currenciesapp.error.MyError
+import com.currenciesapp.error.MyException
+import com.currenciesapp.error.toMyError
 import kotlinx.android.synthetic.main.fragment_rates.*
 import timber.log.Timber
 
@@ -49,9 +52,16 @@ class RatesFragment : BaseFragment() {
                 currentCurrency.invoke(),
                 currentRate.invoke()
             )
-            Timber.i("TESTING rate ${currentRate.invoke()} ${currentRate.invoke()}")
         }
+    }
 
+    private fun handleError(error: Throwable?) = when (error) {
+        is MyError.ConnectionNotEstablished -> {
+            showSnackbar(R.string.fragment_token_connection_error_message, true)
+        }
+        else -> {
+            hideSnack()
+        }
     }
 
     override fun invalidate() = doNothing
@@ -72,8 +82,8 @@ class RatesFragment : BaseFragment() {
             owner = viewLifecycleOwner,
             asyncProp = RatesViewState::currencyList,
             deliveryMode = UniqueOnly(subscriptionId = "SubscribtioIn"),
-            onSuccess = { updateRecycler() },
-            onFail = { Timber.i("TESTING failure $it")}
+            onSuccess = { updateRecycler().also { hideSnack() } },
+            onFail = { handleError(it) }
         )
 
         super.onViewCreated(view, savedInstanceState)

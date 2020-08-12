@@ -24,7 +24,8 @@ class CurrencyItemView @JvmOverloads constructor(
     defStyleAttr: Int = Int.zero
 ) : ConstraintLayout(context, attrs, defStyleAttr) {
 
-    private var userManipulation = true
+    private val userManipulation
+            get() = currencyRate.hasFocus()
 
     lateinit var currencyModel: CurrencyItem
         @ModelProp set
@@ -42,7 +43,7 @@ class CurrencyItemView @JvmOverloads constructor(
     private fun calculatePrice() = (currencyModel.rate * volume)
 
     @AfterPropsSet
-    fun setupView() = executeWithoutUserManipulation {
+    fun setupView() {
         if (isDefaultCurrency.not()) currencyRate.setText(calculatePrice().toString())
 
         with(currencyModel) {
@@ -69,14 +70,12 @@ class CurrencyItemView @JvmOverloads constructor(
         }
     }
 
-    private fun updateVolume() =
-        executeWithoutUserManipulation { currencyRate.setText(currencyRate.text) }
+    private fun updateVolume() = currencyRate.setText(currencyRate.text)
 
     @CallbackProp
     fun onCurrencyChanged(currencyChangedCallback: ((String) -> Unit)?) {
         currencyRate.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus) currencyChangedCallback?.invoke(currencyModel.code)
-                .also { updateVolume() }
+            if (hasFocus) currencyChangedCallback?.invoke(currencyModel.code).also { updateVolume() }
         }
     }
 
@@ -86,17 +85,12 @@ class CurrencyItemView @JvmOverloads constructor(
             override fun afterTextChanged(p0: Editable?) = doNothing
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = doNothing
             override fun onTextChanged(newText: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if (userManipulation && newText.isNullOrBlank().not()) {
+                if (userManipulation  && newText.isNullOrBlank().not()) {
+                    Timber.i("TESTING onVolumeChanged ${currencyModel.code} $volume")
                     onVolumeChangedCallback?.invoke(newText.toString().toFloat())
                 }
             }
         })
-
-    private fun executeWithoutUserManipulation(call: () -> Unit) {
-        userManipulation = false
-        call()
-        userManipulation = true
-    }
 
     @OnViewRecycled
     fun onViewRecycled() {

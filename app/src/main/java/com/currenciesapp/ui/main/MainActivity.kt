@@ -25,20 +25,22 @@ class MainActivity : AppCompatActivity() {
         loadModules()
     }
 
-    private fun showSnackbar(@StringRes text: Int, durationIndefinite: Boolean) {
+    fun showSnackbar(@StringRes text: Int, durationIndefinite: Boolean) {
         snackbar = Snackbar.make(
             mainView,
             text,
             if (durationIndefinite) Snackbar.LENGTH_INDEFINITE else Snackbar.LENGTH_LONG
         )
-
         snackbar?.show()
     }
+
+    fun hideSnack() = snackbar?.dismiss()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        snackbar?.show()
         val navController = findNavController(R.id.navHostFragment)
         setupActionBarWithNavController(navController)
     }
