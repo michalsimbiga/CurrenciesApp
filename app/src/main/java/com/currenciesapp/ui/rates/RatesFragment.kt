@@ -13,7 +13,7 @@ import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.currenciesapp.R
 import com.currenciesapp.UPDATE_TIME_1_SEC
-import com.currenciesapp.common.doNothing
+import com.currenciesapp.doNothing
 import com.currenciesapp.common.ui.BaseFragment
 import com.currenciesapp.error.MyError
 import kotlinx.android.synthetic.main.fragment_rates.*
@@ -56,7 +56,7 @@ class RatesFragment : BaseFragment() {
 
     private fun handleError(error: Throwable?) = when (error) {
         is MyError.ConnectionNotEstablished -> showSnackbar(
-            R.string.fragment_token_connection_error_message,
+            R.string.connection_error_message,
             true
         )
         else -> hideSnack()

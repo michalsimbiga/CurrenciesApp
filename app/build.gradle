@@ -7,6 +7,7 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 android {
     compileSdkVersion Versions.compileSDK
     buildToolsVersion Versions.buildToolsVersion
+
     defaultConfig {
         applicationId ApplicationID.id
         minSdkVersion Versions.minSDK

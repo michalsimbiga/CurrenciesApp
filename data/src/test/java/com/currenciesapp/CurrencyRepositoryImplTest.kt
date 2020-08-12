@@ -1,6 +1,5 @@
 package com.currenciesapp
 
-import com.currenciesapp.common.Result
 import com.currenciesapp.dataSource.RemoteDataSource
 import com.currenciesapp.model.RatesResponse
 import com.currenciesapp.repository.CurrencyRepositoryImpl

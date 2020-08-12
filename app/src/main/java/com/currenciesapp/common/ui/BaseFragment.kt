@@ -4,7 +4,7 @@ import android.view.View
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.mvrx.BaseMvRxFragment
-import com.currenciesapp.common.doNothing
+import com.currenciesapp.doNothing
 import com.currenciesapp.ui.main.MainActivity
 
 abstract class BaseFragment : BaseMvRxFragment() {

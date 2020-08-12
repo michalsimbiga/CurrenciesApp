@@ -3,7 +3,9 @@
 
     <string name="default_volume">1</string>
 
+    <string name="fragment_rates_label">Rates</string>
+
     <!--  Error Messages  -->
-    <string name="fragment_token_connection_error_message">Please check your internet connection and try again</string>
+    <string name="connection_error_message">Please check your internet connection and try again</string>
 
 </resources>

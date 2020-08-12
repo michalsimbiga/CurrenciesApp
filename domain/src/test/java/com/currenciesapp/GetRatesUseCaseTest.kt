@@ -15,7 +15,7 @@ class GetRatesUseCaseTest {
     private lateinit var useCase: GetRatesUseCase
     private val repository: CurrencyRepository = mockk(relaxed = true)
     private val currencyNameParams = GetRatesUseCase.Params("EUR")
-    private val mockedCurrencyList : List<com.currenciesapp.model.Currency> = mockk(relaxed = true)
+    private val mockedCurrencyList: List<com.currenciesapp.model.Currency> = mockk(relaxed = true)
 
     @Before
     fun setup() {

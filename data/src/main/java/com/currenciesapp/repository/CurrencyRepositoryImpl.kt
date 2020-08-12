@@ -11,18 +11,11 @@ class CurrencyRepositoryImpl(private val remoteDataSource: RemoteDataSource) : C
 
     override suspend fun getRates(currencyName: String): Result<List<Currency>> =
         safeCall {
-            val listOfCurrencies: MutableList<CurrencyEntity> = mutableListOf()
-            remoteDataSource.getRates(currencyName).rates.entries.forEach { currency ->
-                listOfCurrencies.add(
-                    prepareCurrencyEntity(
-                        currencyCode = currency.key,
-                        currencyRate = currency.value
-                    )
-                )
-            }
-            listOfCurrencies.add(FIST_INDEX, prepareCurrencyEntity(currencyName, DEFAULT_RATE))
-
-            return@safeCall listOfCurrencies.map(CurrencyEntity::toDomain)
+            remoteDataSource.getRates(currencyName)
+                .rates.entries.flatMapTo(
+                    mutableListOf(prepareCurrencyEntity(currencyName, DEFAULT_RATE)),
+                    { (currency, rate) -> listOf(prepareCurrencyEntity(currency, rate)) })
+                .map(CurrencyEntity::toDomain)
         }
 
     private fun prepareCurrencyEntity(currencyCode: String, currencyRate: Float): CurrencyEntity {
@@ -36,7 +29,6 @@ class CurrencyRepositoryImpl(private val remoteDataSource: RemoteDataSource) : C
     }
 
     companion object {
-        private const val FIST_INDEX = 0
         private const val DEFAULT_RATE = 1f
     }
 }
