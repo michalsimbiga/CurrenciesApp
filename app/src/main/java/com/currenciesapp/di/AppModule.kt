@@ -2,6 +2,7 @@ package com.currenciesapp.di
 
 import androidx.room.Room
 import com.currenciesapp.ApplicationDatabase
+import com.currenciesapp.DATABASE_NAME
 import com.currenciesapp.dao.RatesDao
 import com.currenciesapp.ui.rates.RatesViewModel
 import com.currenciesapp.ui.rates.RatesViewState
@@ -21,7 +22,7 @@ val appModule = module {
         Room.databaseBuilder(
             androidContext(),
             ApplicationDatabase::class.java,
-            "RatesDatabase"
+            DATABASE_NAME
         ).build()
     }
 
