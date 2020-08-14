@@ -61,6 +61,10 @@ dependencies {
     implementation Libraries.koinViewModelAndroidX
     implementation Libraries.mvrx
 
+    implementation Libraries.room
+    implementation Libraries.roomCoroutines
+    kapt Libraries.roomAnnotationProcessor
+
     implementation Libraries.epoxy
     kapt Libraries.epoxyKapt
 

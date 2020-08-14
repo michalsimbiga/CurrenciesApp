@@ -2,7 +2,9 @@ package com.currenciesapp.di
 
 import com.currenciesapp.BASE_URL
 import com.currenciesapp.MAX_TIMEOUT
+import com.currenciesapp.adapters.CurrencyAdapter
 import com.currenciesapp.api.CurrencyApi
+import com.currenciesapp.dataSource.LocalDataSource
 import com.currenciesapp.dataSource.RemoteDataSource
 import com.currenciesapp.repository.CurrencyRepository
 import com.currenciesapp.repository.CurrencyRepositoryImpl
@@ -39,15 +41,19 @@ val dataModule = module {
 
     single { RemoteDataSource(currencyApi = get()) }
 
+//    single { LocalDataSource(ratesDao = get()) }
+
     single<CurrencyRepository> {
         CurrencyRepositoryImpl(
-            remoteDataSource = get()
-        )
+            remoteDataSource = get())
+//            localDataSource = get()
+//        )
     }
 
     single<Moshi> {
         Moshi.Builder()
             .add(KotlinJsonAdapterFactory())
+            .add(CurrencyAdapter)
             .build()
     }
 }

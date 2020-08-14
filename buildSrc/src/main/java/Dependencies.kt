@@ -16,7 +16,7 @@ object Modules {
 }
 
 object Versions {
-    val kotlin = "1.3.50"
+    val kotlin = "1.3.70"
 
     val gradle = "3.5.1"
     val minSDK = 23
@@ -26,7 +26,7 @@ object Versions {
     val instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     val buildToolsVersion = "29.0.2"
-    val kotlinCoroutines = "1.3.2"
+    val kotlinCoroutines = "1.3.1"
 
     val navigation = "2.3.0-alpha06"
     val appCompat = "1.1.0"
@@ -46,6 +46,8 @@ object Versions {
     val mvrx = "1.4.0"
     val epoxy = "3.9.0"
 
+    val room = "2.2.5"
+
     val threeTen = "1.2.1"
 
     val junit = "4.12"
@@ -61,7 +63,6 @@ object Versions {
     val ktlint = "0.29.0"
 
     val currencyPicker = "1.2.1"
-
     val circleImageView = "3.1.0"
 }
 
@@ -78,16 +79,24 @@ object Libraries {
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}"
 
     val okHttp = "com.squareup.okhttp3:okhttp:${Versions.okhttp}"
-    val okHttpInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.loggingInterceptor}"
+    val okHttpInterceptor =
+        "com.squareup.okhttp3:logging-interceptor:${Versions.loggingInterceptor}"
     val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     val moshi = "com.squareup.moshi:moshi:${Versions.moshi}"
     val moshiConverter = "com.squareup.retrofit2:converter-moshi:${Versions.retrofit}"
+    val moshiCodegen = "com.squareup.moshi:moshi-kotlin-codegen:${Versions.moshi}"
     val moshiKotlin = "com.squareup.moshi:moshi-kotlin:${Versions.moshi}"
 
     val epoxy = "com.airbnb.android:epoxy:${Versions.epoxy}"
     val epoxyKapt = "com.airbnb.android:epoxy-processor:${Versions.epoxy}"
 
     val mvrx = "com.airbnb.android:mvrx:${Versions.mvrx}"
+
+    val room = "androidx.room:room-runtime:${Versions.room}"
+    val roomAnnotationProcessor =
+        "androidx.room:room-compiler:${Versions.room}"
+
+    val roomCoroutines = "androidx.room:room-ktx:${Versions.room}"
 
     val threeTen = "com.jakewharton.threetenabp:threetenabp:${Versions.threeTen}"
 
@@ -104,7 +113,7 @@ object Libraries {
 
     val currencyPicker = "com.github.midorikocak:currency-picker-android:${Versions.currencyPicker}"
 
-    val circleImageView =  "de.hdodenhof:circleimageview:${Versions.circleImageView}"
+    val circleImageView = "de.hdodenhof:circleimageview:${Versions.circleImageView}"
 }
 
 object TestLibraries {
@@ -113,7 +122,8 @@ object TestLibraries {
     val mockk = "io.mockk:mockk:${Versions.mockk}"
     val junit = "junit:junit:${Versions.junit}"
     val extJunit = "androidx.test.ext:junit:${Versions.ext_junit}"
-    val kotlinCoroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlinCoroutines}"
+    val kotlinCoroutinesTest =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlinCoroutines}"
     val threetenabp = "org.threeten:threetenbp:${Versions.threetenabp}"
     val koin = "org.koin:koin-test:${Versions.koinAndroidX}"
 

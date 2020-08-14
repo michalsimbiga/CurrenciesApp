@@ -1,7 +1,7 @@
 package com.currenciesapp
 
 import com.currenciesapp.dataSource.RemoteDataSource
-import com.currenciesapp.model.RatesResponse
+import com.currenciesapp.model.dto.RatesDto
 import com.currenciesapp.repository.CurrencyRepositoryImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -15,7 +15,7 @@ class CurrencyRepositoryImplTest {
     private lateinit var currencyRepositoryImpl: CurrencyRepositoryImpl
 
     private val remoteDataSource: RemoteDataSource = mockk(relaxed = true)
-    private val mockedRatesResponse: RatesResponse = mockk(relaxed = true)
+    private val mockedRatesDto: RatesDto = mockk(relaxed = true)
 
     @Before
     fun setup() {
@@ -26,7 +26,7 @@ class CurrencyRepositoryImplTest {
     fun `When getRates invoked call remote data source to fetch rates data`() =
         runBlocking {
             val exampleCurrency = "EUR"
-            coEvery { remoteDataSource.getRates(any()) } returns mockedRatesResponse
+            coEvery { remoteDataSource.getRates(any()) } returns mockedRatesDto
 
             currencyRepositoryImpl.getRates(exampleCurrency)
 

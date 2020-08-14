@@ -2,7 +2,7 @@ package com.currenciesapp
 
 import com.currenciesapp.api.CurrencyApi
 import com.currenciesapp.dataSource.RemoteDataSource
-import com.currenciesapp.model.RatesResponse
+import com.currenciesapp.model.dto.RatesDto
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -16,7 +16,7 @@ class RemoteDataSourceTest {
     private lateinit var remoteDataSource: RemoteDataSource
 
     private val currencyApi: CurrencyApi = mockk(relaxed = true)
-    private val mockedRatesResponse: RatesResponse = mockk(relaxed = true)
+    private val mockedRatesDto: RatesDto = mockk(relaxed = true)
 
     @Before
     fun setup() {
@@ -26,7 +26,7 @@ class RemoteDataSourceTest {
     @Test
     fun `When remoteDataSource getRates invoked then currencyApi method is called`() = runBlocking {
         val exampleCurrency = "EUR"
-        coEvery { currencyApi.getRatesFor(any()) } returns Response.success(mockedRatesResponse)
+        coEvery { currencyApi.getRatesFor(any()) } returns Response.success(mockedRatesDto)
 
         remoteDataSource.getRates(exampleCurrency)
 
