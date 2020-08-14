@@ -9,6 +9,7 @@ import com.currenciesapp.common.ui.MvRxViewModel
 import com.currenciesapp.model.Currency
 import com.currenciesapp.model.toItem
 import com.currenciesapp.useCase.GetRatesUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class RatesViewModel(
@@ -23,7 +24,7 @@ class RatesViewModel(
     }
 
     fun updateRates() = withState { state ->
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.Default) {
             getRatesUseCase.execute(
                 params = GetRatesUseCase.Params(
                     currencyName = state.currentCurrency.invoke().toString()

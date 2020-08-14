@@ -6,7 +6,14 @@ import com.squareup.moshi.Json
 data class RatesDto(
     @Json(name = "baseCurrency") val baseCurrency: String,
     @Json(name = "rates") val rates: MutableList<CurrencyDto>
-)
+) {
+    fun insertCurrency(currency: CurrencyDto) =
+        copy(baseCurrency = baseCurrency, rates = rates.apply { add(FIRST_INDEX, currency) })
+
+    companion object {
+        private const val FIRST_INDEX = 0
+    }
+}
 
 fun RatesDto.toEntity() =
     RatesEntity(
