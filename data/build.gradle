@@ -11,6 +11,8 @@ dependencies {
 
     implementation Libraries.threeTen
 
+    implementation 'com.google.code.gson:gson:2.8.6'
+
     implementation Libraries.room
     implementation Libraries.roomCoroutines
     kapt Libraries.roomAnnotationProcessor
@@ -21,6 +23,8 @@ dependencies {
     implementation Libraries.moshi
     implementation Libraries.moshiKotlin
     implementation Libraries.moshiConverter
+
+    kapt Libraries.moshiCodegen
 
     testImplementation TestLibraries.junit
     testImplementation TestLibraries.mockk

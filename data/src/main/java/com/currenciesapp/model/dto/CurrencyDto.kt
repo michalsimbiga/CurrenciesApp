@@ -10,6 +10,5 @@ data class CurrencyDto(
 fun CurrencyDto.toEntity() =
     CurrencyEntity(
         code = code,
-        fullName = java.util.Currency.getInstance(code).displayName,
         rate = rate
     )

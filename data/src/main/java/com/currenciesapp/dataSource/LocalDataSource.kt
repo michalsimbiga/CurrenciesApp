@@ -7,6 +7,5 @@ class LocalDataSource(private val ratesDao: RatesDao) {
 
     suspend fun insertRates(ratesEntity: RatesEntity) = ratesDao.insertRates(ratesEntity)
 
-//    suspend fun getRatesFlow(currencyName: String) =
-//        ratesDao.getRatesByCurrency(currencyName)
+    suspend fun getRatesFlow(currencyName: String) = ratesDao.getRatesByCurrency(currencyName)
 }

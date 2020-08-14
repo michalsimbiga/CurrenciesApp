@@ -28,7 +28,7 @@ class CurrencyRepositoryImplTest {
             val exampleCurrency = "EUR"
             coEvery { remoteDataSource.getRates(any()) } returns mockedRatesDto
 
-            currencyRepositoryImpl.getRates(exampleCurrency)
+            currencyRepositoryImpl.fetchRatesFor(exampleCurrency)
 
             coVerify { remoteDataSource.getRates(exampleCurrency) }
         }

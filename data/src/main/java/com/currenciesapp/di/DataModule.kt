@@ -26,7 +26,7 @@ val dataModule = module {
             writeTimeout(MAX_TIMEOUT, TimeUnit.MILLISECONDS)
             readTimeout(MAX_TIMEOUT, TimeUnit.MILLISECONDS)
         }.addInterceptor(HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = HttpLoggingInterceptor.Level.NONE
         }).build()
     }
 

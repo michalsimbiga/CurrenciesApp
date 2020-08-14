@@ -4,30 +4,25 @@ import com.currenciesapp.common.Result
 import com.currenciesapp.common.safeCall
 import com.currenciesapp.dataSource.LocalDataSource
 import com.currenciesapp.dataSource.RemoteDataSource
-import com.currenciesapp.model.Currency
-import com.currenciesapp.model.dto.CurrencyDto
-import com.currenciesapp.model.dto.RatesDto
+import com.currenciesapp.model.Rates
 import com.currenciesapp.model.dto.toEntity
-import com.currenciesapp.model.entity.CurrencyEntity
-import com.currenciesapp.model.entity.RatesEntity
 import com.currenciesapp.model.entity.toDomain
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.mapLatest
 
 class CurrencyRepositoryImpl(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource
 ) : CurrencyRepository {
 
-    override suspend fun getRates(currencyName: String): Result<List<Currency>> =
+    override suspend fun fetchRatesFor(currencyName: String): Result<Unit> =
         safeCall {
             remoteDataSource.getRates(currencyName)
-                .insertCurrency(CurrencyDto(currencyName, DEFAULT_RATE))
                 .toEntity()
                 .apply { localDataSource.insertRates(this) }
-                .rates
-                .map(CurrencyEntity::toDomain)
+            Unit
         }
 
-    companion object {
-        private const val DEFAULT_RATE = 1.0
-    }
+    override suspend fun getRatesFlowFor(currencyName: String): Result<Flow<Rates>> =
+        safeCall { localDataSource.getRatesFlow(currencyName).mapLatest { it.toDomain() } }
 }

@@ -1,18 +1,17 @@
 package com.currenciesapp.model.entity
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.currenciesapp.model.Currency
 
+@Entity
 data class CurrencyEntity(
-    val code: String,
-    val fullName: String,
+    @PrimaryKey val code: String,
     val rate: Double
-) {
-    override fun toString(): String = "$code,$fullName,$rate"
-}
+)
 
 fun CurrencyEntity.toDomain() =
     Currency(
         code = code,
-        fullName = fullName,
         rate = rate
     )

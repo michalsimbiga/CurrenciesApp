@@ -48,6 +48,8 @@ dependencies {
     implementation project(Modules.domain)
     implementation project(Modules.data)
 
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
+
     implementation Libraries.kotlin
 
     implementation Libraries.currencyPicker

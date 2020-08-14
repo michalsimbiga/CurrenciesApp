@@ -14,7 +14,8 @@ val appModule = module {
     viewModel { (state: RatesViewState) ->
         RatesViewModel(
             state = state,
-            getRatesUseCase = get()
+            getRatesUseCase = get(),
+            getRatesFlowUseCase = get()
         )
     }
 

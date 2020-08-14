@@ -25,10 +25,10 @@ class GetRatesUseCaseTest {
     @Test
     fun `When save ticket data invoked then call repository to save ticket data`() =
         runBlockingTest {
-            coEvery { repository.getRates(any()) } returns Result.Success(mockedCurrencyList)
+            coEvery { repository.fetchRatesFor(any()) } returns Result.Success(mockedCurrencyList)
 
             useCase.invoke(currencyNameParams)
 
-            coVerify { repository.getRates(currencyNameParams.currencyName) }
+            coVerify { repository.fetchRatesFor(currencyNameParams.currencyName) }
         }
 }
