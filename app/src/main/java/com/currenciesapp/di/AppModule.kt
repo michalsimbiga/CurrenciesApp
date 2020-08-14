@@ -1,6 +1,8 @@
 package com.currenciesapp.di
 
 import androidx.room.Room
+import com.currenciesapp.ApplicationDatabase
+import com.currenciesapp.dao.RatesDao
 import com.currenciesapp.ui.rates.RatesViewModel
 import com.currenciesapp.ui.rates.RatesViewState
 import org.koin.android.ext.koin.androidContext
@@ -14,13 +16,17 @@ val appModule = module {
             getRatesUseCase = get()
         )
     }
-//
-//    single<ApplicationDatabase> {
-//        Room.databaseBuilder(
-//            androidContext(),
-//            ApplicationDatabase::class.java,
-//            "RatesDatabase"
-//        ).build()
-//    }
+
+    single<ApplicationDatabase> {
+        Room.databaseBuilder(
+            androidContext(),
+            ApplicationDatabase::class.java,
+            "RatesDatabase"
+        ).build()
+    }
+
+    single<RatesDao> {
+        get<ApplicationDatabase>().ratesDao()
+    }
 
 }

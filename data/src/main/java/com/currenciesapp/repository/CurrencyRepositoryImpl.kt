@@ -11,14 +11,14 @@ import com.currenciesapp.model.entity.CurrencyEntity
 import com.currenciesapp.model.entity.toDomain
 
 class CurrencyRepositoryImpl(
-    private val remoteDataSource: RemoteDataSource
-    //    private val localDataSource: LocalDataSource
+    private val remoteDataSource: RemoteDataSource,
+        private val localDataSource: LocalDataSource
 ) : CurrencyRepository {
 
     override suspend fun getRates(currencyName: String): Result<List<Currency>> =
         safeCall {
             remoteDataSource.getRates(currencyName).rates.apply {
-                add(FIRST_INDEX,CurrencyDto(currencyName, DEFAULT_RATE))
+                add(FIRST_INDEX, CurrencyDto(currencyName, DEFAULT_RATE))
             }
                 .map(CurrencyDto::toEntity)
                 .map(CurrencyEntity::toDomain)

@@ -4,6 +4,7 @@ import com.currenciesapp.BASE_URL
 import com.currenciesapp.MAX_TIMEOUT
 import com.currenciesapp.adapters.CurrencyAdapter
 import com.currenciesapp.api.CurrencyApi
+import com.currenciesapp.dao.RatesDao
 import com.currenciesapp.dataSource.LocalDataSource
 import com.currenciesapp.dataSource.RemoteDataSource
 import com.currenciesapp.repository.CurrencyRepository
@@ -41,13 +42,13 @@ val dataModule = module {
 
     single { RemoteDataSource(currencyApi = get()) }
 
-//    single { LocalDataSource(ratesDao = get()) }
+    single { LocalDataSource(ratesDao = get()) }
 
     single<CurrencyRepository> {
         CurrencyRepositoryImpl(
-            remoteDataSource = get())
-//            localDataSource = get()
-//        )
+            remoteDataSource = get(),
+            localDataSource = get()
+        )
     }
 
     single<Moshi> {
