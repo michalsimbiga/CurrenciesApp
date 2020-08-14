@@ -11,11 +11,14 @@ import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
 import com.airbnb.epoxy.OnViewRecycled
 import com.currenciesapp.R
+import com.currenciesapp.common.extensions.comma
+import com.currenciesapp.common.extensions.dot
 import com.currenciesapp.common.extensions.hideKeyboard
 import com.currenciesapp.common.extensions.zero
 import com.currenciesapp.model.CurrencyItem
 import com.mynameismidori.currencypicker.ExtendedCurrency
 import kotlinx.android.synthetic.main.fragment_rates_currency_item.view.*
+import timber.log.Timber
 import kotlin.properties.Delegates
 
 @ModelView(saveViewState = true, autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
@@ -89,10 +92,14 @@ class CurrencyItemView @JvmOverloads constructor(
     @CallbackProp
     fun onVolumeChanged(onVolumeChangedCallback: ((Float) -> Unit)?) =
         currencyRate.doOnTextChanged { text, _, _, _ ->
-            if (userManipulation && text.isNullOrBlank().not()) {
-                onVolumeChangedCallback?.invoke(text.toString().toFloat())
+            val volumeString = text.toString()
+            if (userManipulation && isVolumeValid(volumeString)) {
+                onVolumeChangedCallback?.invoke(volumeString.toFloat())
             }
         }
+
+    private fun isVolumeValid(text: CharSequence?) =
+        text.isNullOrBlank().not() && text != String.dot && text?.trim() != String.comma
 
     @OnViewRecycled
     fun onViewRecycled() {
