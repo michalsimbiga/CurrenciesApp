@@ -2,6 +2,7 @@ package com.currenciesapp.ui.rates
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Success
+import com.currenciesapp.UPDATE_TIME_1_SEC
 import com.currenciesapp.common.ui.KoinMvRxViewModelFactory
 import com.currenciesapp.common.ui.MvRxViewModel
 import com.currenciesapp.model.Rates
@@ -49,7 +50,7 @@ class RatesViewModel(
                 getRatesUseCase.run(
                     params = GetRatesUseCase.Params(state.currentCurrency.invoke().toString())
                 )
-                delay(1500)
+                delay(UPDATE_TIME_1_SEC)
             }
         }
     }

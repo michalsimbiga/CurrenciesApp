@@ -48,7 +48,7 @@ class CurrencyItemView @JvmOverloads constructor(
     @AfterPropsSet
     fun setupView() {
 
-        // TODO: FIND OUT WHY IT DOESNT WORK WITHOUT GLOBAL SCOPE FOR OFFLINE MODE (IF DATA IS PRESENT IN DB)
+        // TODO FIND OUT WHY IT DOESNT WORK WITHOUT GLOBAL SCOPE FOR OFFLINE MODE (IF DATA IS PRESENT IN DB)
         if (userManipulation.not()) GlobalScope.launch(Dispatchers.Main) {
             currencyRate.setText(
                 calculatePrice().toString()
