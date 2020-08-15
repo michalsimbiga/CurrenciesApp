@@ -10,6 +10,7 @@ Simple currency converter application that allows for converting given volume of
 ## Technology Stack used 
 * MvRx
 * Coroutines
+* Room
 * Epoxy
 
 ## How to build the application
