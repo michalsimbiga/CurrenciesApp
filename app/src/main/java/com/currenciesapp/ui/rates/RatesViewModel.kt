@@ -2,29 +2,18 @@ package com.currenciesapp.ui.rates
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Success
-import com.currenciesapp.DEFAULT_CURRENCY
-import com.currenciesapp.DEFAULT_VOLUME
-import com.currenciesapp.common.Result
 import com.currenciesapp.common.ui.KoinMvRxViewModelFactory
 import com.currenciesapp.common.ui.MvRxViewModel
-import com.currenciesapp.model.Currency
 import com.currenciesapp.model.Rates
 import com.currenciesapp.model.toItem
 import com.currenciesapp.useCase.GetRatesFlowUseCase
 import com.currenciesapp.useCase.GetRatesUseCase
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 class RatesViewModel(
@@ -42,20 +31,26 @@ class RatesViewModel(
     private val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
 
+    private val mainContext: CoroutineContext
+        get() = Dispatchers.Main + job
+
+    private fun setNewRates(rates: Rates) {
+        setState { copy(currencyList = Success(rates.toItem())) }
+    }
+
     private fun setFlowCollector(flow: Flow<Rates>) =
-        viewModelScope.launch(coroutineContext) {
-            flow.collect {
-                setState { copy(currencyList = Success(it.toItem())) }
-            }
+        viewModelScope.launch(mainContext) {
+            flow.collect { setNewRates(it) }
         }
 
     fun updateRates() = withState { state ->
-        viewModelScope.launch(Dispatchers.Default) {
-            getRatesUseCase.run(
-                params = GetRatesUseCase.Params(
-                    currencyName = state.currentCurrency.invoke().toString()
+        viewModelScope.launch(Dispatchers.IO) {
+            while (true) {
+                getRatesUseCase.run(
+                    params = GetRatesUseCase.Params(state.currentCurrency.invoke().toString())
                 )
-            )
+                delay(1500)
+            }
         }
     }
 
@@ -73,7 +68,6 @@ class RatesViewModel(
         copy(currentCurrency = Success(newCurrencyCode))
     }.also {
         recreateCoroutineContext()
-        updateRates()
         getRatesFlow()
     }
 

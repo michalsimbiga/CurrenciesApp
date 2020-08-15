@@ -6,7 +6,6 @@ import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.Uninitialized
 import com.currenciesapp.DEFAULT_CURRENCY
 import com.currenciesapp.DEFAULT_VOLUME
-import com.currenciesapp.model.CurrencyItem
 import com.currenciesapp.model.RatesItem
 
 data class RatesViewState(

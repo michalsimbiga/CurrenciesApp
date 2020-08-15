@@ -1,7 +1,6 @@
 package com.currenciesapp.repository
 
 import com.currenciesapp.common.Result
-import com.currenciesapp.model.Currency
 import com.currenciesapp.model.Rates
 import kotlinx.coroutines.flow.Flow
 

@@ -8,3 +8,6 @@ val String.Companion.dot
 
 val String.Companion.comma
     get() = ","
+
+val String.Companion.semicolon
+    get() = ";"

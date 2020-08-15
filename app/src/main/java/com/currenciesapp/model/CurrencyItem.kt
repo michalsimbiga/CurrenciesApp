@@ -9,6 +9,6 @@ data class CurrencyItem(
 fun Currency.toItem() =
     CurrencyItem(
         code = code,
-        fullName =  java.util.Currency.getInstance(code).displayName,
+        fullName = java.util.Currency.getInstance(code).displayName,
         rate = rate
     )

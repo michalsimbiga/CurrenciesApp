@@ -1,5 +1,3 @@
-@file:Suppress("TooManyFunctions")
-
 package com.currenciesapp.ui.rates
 
 import android.os.Bundle
@@ -8,12 +6,10 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.airbnb.mvrx.UniqueOnly
+import com.airbnb.mvrx.Success
 import com.airbnb.mvrx.fragmentViewModel
 import com.airbnb.mvrx.withState
 import com.currenciesapp.R
-import com.currenciesapp.UPDATE_TIME_1_SEC
-import com.currenciesapp.doNothing
 import com.currenciesapp.common.ui.BaseFragment
 import com.currenciesapp.error.MyError
 import kotlinx.android.synthetic.main.fragment_rates.*
@@ -29,13 +25,6 @@ class RatesFragment : BaseFragment() {
             onCurrencyChangedCallback = ::onCurrencySelected,
             onVolumeChangedCallback = ::onCurrencyRateChanged
         )
-    }
-
-    private val updateRatesTask = object : Runnable {
-        override fun run() {
-            viewModel.updateRates()
-            handler.postDelayed(this, UPDATE_TIME_1_SEC)
-        }
     }
 
     private fun onCurrencySelected(currencyName: String) =
@@ -61,7 +50,10 @@ class RatesFragment : BaseFragment() {
         else -> hideSnack()
     }
 
-    override fun invalidate() = doNothing
+    override fun invalidate() = withState(viewModel) { state ->
+        if (state.currencyList is Success) updateRecycler()
+        if (state.currentRate is Success && state.currencyList is Success) updateRecycler()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,14 +67,6 @@ class RatesFragment : BaseFragment() {
 
         handler = Handler(Looper.getMainLooper())
 
-        viewModel.asyncSubscribe(
-            owner = viewLifecycleOwner,
-            asyncProp = RatesViewState::currencyList,
-            deliveryMode = UniqueOnly(subscriptionId = CURRENCY_SUBSCRIPTION_ID),
-            onSuccess = { updateRecycler().also { hideSnack() } },
-            onFail = { handleError(it) }
-        )
-
         super.onViewCreated(view, savedInstanceState)
     }
 
@@ -90,18 +74,6 @@ class RatesFragment : BaseFragment() {
         epoxyController.onSaveInstanceState(outState)
 
         super.onSaveInstanceState(outState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-
-        handler.post(updateRatesTask)
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        handler.removeCallbacks(updateRatesTask)
     }
 
     override fun onDestroyView() {

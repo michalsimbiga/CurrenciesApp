@@ -30,5 +30,4 @@ val appModule = module {
     single<RatesDao> {
         get<ApplicationDatabase>().ratesDao()
     }
-
 }

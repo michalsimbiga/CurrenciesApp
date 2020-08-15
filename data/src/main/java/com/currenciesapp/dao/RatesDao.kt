@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.currenciesapp.model.entity.CurrencyEntity
 import com.currenciesapp.model.entity.RatesEntity
 import kotlinx.coroutines.flow.Flow
 

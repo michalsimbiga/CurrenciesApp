@@ -1,31 +1,27 @@
 package com.currenciesapp.converters
 
 import androidx.room.TypeConverter
+import com.currenciesapp.common.extensions.comma
+import com.currenciesapp.common.extensions.semicolon
 import com.currenciesapp.model.entity.CurrencyEntity
-import com.currenciesapp.model.entity.RatesEntity
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import com.squareup.moshi.Moshi
-import java.lang.reflect.Type
-import java.util.Currency
 
 class CurrencyTypeConverter {
 
+    // TODO SIMPLIFY THE CONVERTER
+
     @TypeConverter
     fun fromList(list: List<CurrencyEntity>): String = list.joinToString(
-        separator = ":",
-        transform = { currency -> "${currency.code},${currency.rate}" })
+        separator = String.semicolon,
+        transform = { currency -> currency.code + String.comma + currency.rate })
 
     @TypeConverter
     fun toList(string: String): List<CurrencyEntity> {
         val listOfObject = mutableListOf<CurrencyEntity>()
 
-        string.split(":").forEach { str ->
-            val obj = str.split(",")
+        string.split(String.semicolon).forEach { str ->
+            val obj = str.split(String.comma)
             listOfObject.add(CurrencyEntity(obj.first(), obj[1].toDouble()))
         }
-
         return listOfObject.toList()
-
     }
 }

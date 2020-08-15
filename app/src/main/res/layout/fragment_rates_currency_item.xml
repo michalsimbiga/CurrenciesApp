@@ -43,7 +43,6 @@
         android:layout_height="0dp"
         android:layout_margin="@dimen/margin_medium_16dp"
         android:imeOptions="actionDone"
-        android:text="@string/default_volume"
         android:inputType="numberDecimal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

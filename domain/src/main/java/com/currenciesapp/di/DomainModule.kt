@@ -9,5 +9,4 @@ val domainModule = module {
     factory { GetRatesUseCase(currencyRepository = get()) }
 
     factory { GetRatesFlowUseCase(currencyRepository = get()) }
-
 }

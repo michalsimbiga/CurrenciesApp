@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.widget.doOnTextChanged
 import com.airbnb.epoxy.AfterPropsSet
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
@@ -14,11 +13,14 @@ import com.currenciesapp.R
 import com.currenciesapp.common.extensions.comma
 import com.currenciesapp.common.extensions.dot
 import com.currenciesapp.common.extensions.hideKeyboard
+import com.currenciesapp.common.extensions.onTextChangedTextWatcher
 import com.currenciesapp.common.extensions.zero
 import com.currenciesapp.model.CurrencyItem
 import com.mynameismidori.currencypicker.ExtendedCurrency
 import kotlinx.android.synthetic.main.fragment_rates_currency_item.view.*
-import timber.log.Timber
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlin.properties.Delegates
 
 @ModelView(saveViewState = true, autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
@@ -37,9 +39,6 @@ class CurrencyItemView @JvmOverloads constructor(
     var volume by Delegates.notNull<Double>()
         @ModelProp set
 
-    var isDefaultCurrency by Delegates.notNull<Boolean>()
-        @ModelProp set
-
     init {
         inflate(context, R.layout.fragment_rates_currency_item, this)
     }
@@ -48,8 +47,13 @@ class CurrencyItemView @JvmOverloads constructor(
 
     @AfterPropsSet
     fun setupView() {
-        if (isDefaultCurrency.not()) currencyRate.setText(calculatePrice().toString())
-        else currencyRate.requestFocus()
+
+        // TODO: FIND OUT WHY IT DOESNT WORK WITHOUT GLOBAL SCOPE FOR OFFLINE MODE (IF DATA IS PRESENT IN DB)
+        if (userManipulation.not()) GlobalScope.launch(Dispatchers.Main) {
+            currencyRate.setText(
+                calculatePrice().toString()
+            )
+        }
 
         with(currencyModel) {
             currencyName.text = code
@@ -90,13 +94,13 @@ class CurrencyItemView @JvmOverloads constructor(
     }
 
     @CallbackProp
-    fun onVolumeChanged(onVolumeChangedCallback: ((Double) -> Unit)?) =
-        currencyRate.doOnTextChanged { text, _, _, _ ->
-            val volumeString = text.toString()
-            if (userManipulation && isVolumeValid(volumeString)) {
-                onVolumeChangedCallback?.invoke(volumeString.toDouble())
+    fun onVolumeChanged(onVolumeChangedCallback: ((Double) -> Unit)?) {
+        currencyRate.onTextChangedTextWatcher { newVolume ->
+            if (isVolumeValid(newVolume)) {
+                onVolumeChangedCallback?.invoke(newVolume.toDouble())
             }
         }
+    }
 
     private fun isVolumeValid(text: CharSequence?) =
         text.isNullOrBlank().not() && text != String.dot && text?.trim() != String.comma

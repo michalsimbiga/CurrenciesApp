@@ -7,23 +7,10 @@ import com.airbnb.mvrx.Fail
 import com.airbnb.mvrx.MvRxState
 import com.airbnb.mvrx.Success
 import com.currenciesapp.common.useCase.UseCase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 
 abstract class MvRxViewModel<State : MvRxState>(
     private val initialState: State
 ) : BaseMvRxViewModel<State>(initialState, debugMode = BuildConfig.DEBUG) {
-
-//    protected val viewModelJob = SupervisorJob()
-//
-//    protected val backgroundScope = CoroutineScope(viewModelJob + Dispatchers.Default)
-//
-//    override fun onCleared() {
-//        super.onCleared()
-//
-//        viewModelJob.cancel()
-//    }
 
     suspend fun <Type : Any, Type2, Param> UseCase<Type, Param>.execute(
         params: Param,
