@@ -1,23 +1,31 @@
 package com.currenciesapp.ui.rates
 
-import com.airbnb.epoxy.Typed3EpoxyController
-import com.currenciesapp.model.CurrencyItem
+import com.airbnb.epoxy.Typed2EpoxyController
+import com.currenciesapp.model.RatesItem
 import com.currenciesapp.ui.rates.view.currencyItemView
 
 class RatesEpoxyController(
     private var onCurrencyChangedCallback: ((String) -> Unit)?,
-    private var onVolumeChangedCallback: ((Float) -> Unit)?
-) : Typed3EpoxyController<List<CurrencyItem>, String, Float>() {
+    private var onVolumeChangedCallback: ((Double) -> Unit)?
+) : Typed2EpoxyController<RatesItem, Double>() {
 
     override fun buildModels(
-        currencyList: List<CurrencyItem>?,
-        currentCurrency: String,
-        volume: Float
+        currencyRates: RatesItem,
+        volume: Double
     ) {
-        currencyList?.forEach { currency ->
+        currencyItemView {
+            id(currencyRates.baseCurrency.code)
+            defaultCurrency(true)
+            volume(volume)
+            currencyModel(currencyRates.baseCurrency)
+            onCurrencyChanged(onCurrencyChangedCallback)
+            onVolumeChanged(onVolumeChangedCallback)
+        }
+
+        currencyRates.rates.forEach { currency ->
             currencyItemView {
                 id(currency.code)
-                defaultCurrency(currentCurrency == currency.code)
+                defaultCurrency(false)
                 volume(volume)
                 currencyModel(currency)
                 onCurrencyChanged(onCurrencyChangedCallback)

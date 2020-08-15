@@ -41,14 +41,13 @@ class RatesFragment : BaseFragment() {
     private fun onCurrencySelected(currencyName: String) =
         viewModel.setNewBaseCurrency(currencyName)
 
-    private fun onCurrencyRateChanged(currencyRate: Float) =
+    private fun onCurrencyRateChanged(currencyRate: Double) =
         viewModel.setNewRate(currencyRate)
 
     private fun updateRecycler() = withState(viewModel) { state ->
         with(state) {
             epoxyController.setData(
                 currencyList.invoke(),
-                currentCurrency.invoke(),
                 currentRate.invoke()
             )
         }

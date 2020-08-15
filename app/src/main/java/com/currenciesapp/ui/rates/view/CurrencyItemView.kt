@@ -34,7 +34,7 @@ class CurrencyItemView @JvmOverloads constructor(
     lateinit var currencyModel: CurrencyItem
         @ModelProp set
 
-    var volume by Delegates.notNull<Float>()
+    var volume by Delegates.notNull<Double>()
         @ModelProp set
 
     var isDefaultCurrency by Delegates.notNull<Boolean>()
@@ -90,11 +90,11 @@ class CurrencyItemView @JvmOverloads constructor(
     }
 
     @CallbackProp
-    fun onVolumeChanged(onVolumeChangedCallback: ((Float) -> Unit)?) =
+    fun onVolumeChanged(onVolumeChangedCallback: ((Double) -> Unit)?) =
         currencyRate.doOnTextChanged { text, _, _, _ ->
             val volumeString = text.toString()
             if (userManipulation && isVolumeValid(volumeString)) {
-                onVolumeChangedCallback?.invoke(volumeString.toFloat())
+                onVolumeChangedCallback?.invoke(volumeString.toDouble())
             }
         }
 

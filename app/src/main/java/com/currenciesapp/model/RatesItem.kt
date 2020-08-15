@@ -1,12 +1,14 @@
 package com.currenciesapp.model
 
+import com.currenciesapp.DEFAULT_VOLUME
+
 data class RatesItem(
-    val baseCurrency: String,
+    val baseCurrency: CurrencyItem,
     val rates: List<CurrencyItem>
 )
 
 fun Rates.toItem() =
     RatesItem(
-        baseCurrency = baseCurrency,
+        baseCurrency = Currency(baseCurrency, DEFAULT_VOLUME).toItem(),
         rates = rates.map(Currency::toItem)
     )

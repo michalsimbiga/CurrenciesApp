@@ -15,15 +15,15 @@ abstract class MvRxViewModel<State : MvRxState>(
     private val initialState: State
 ) : BaseMvRxViewModel<State>(initialState, debugMode = BuildConfig.DEBUG) {
 
-    private val viewModelJob = SupervisorJob()
-
-    protected val backgroundScope = CoroutineScope(viewModelJob + Dispatchers.Default)
-
-    override fun onCleared() {
-        super.onCleared()
-
-        viewModelJob.cancel()
-    }
+//    protected val viewModelJob = SupervisorJob()
+//
+//    protected val backgroundScope = CoroutineScope(viewModelJob + Dispatchers.Default)
+//
+//    override fun onCleared() {
+//        super.onCleared()
+//
+//        viewModelJob.cancel()
+//    }
 
     suspend fun <Type : Any, Type2, Param> UseCase<Type, Param>.execute(
         params: Param,
