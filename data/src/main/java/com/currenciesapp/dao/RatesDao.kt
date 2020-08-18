@@ -14,5 +14,5 @@ interface RatesDao {
     suspend fun insertRates(ratesEntity: RatesEntity)
 
     @Query("SELECT * FROM ratesentity WHERE baseCurrency LIKE :currencyCode")
-     fun getRatesByCurrency(currencyCode: String): Flow<RatesEntity>
+    fun getRatesByCurrency(currencyCode: String): Flow<RatesEntity>
 }

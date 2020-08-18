@@ -1,29 +1,21 @@
 package com.currenciesapp
 
 import androidx.room.Room
-import androidx.test.espresso.matcher.ViewMatchers.assertThat
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.currenciesapp.dao.RatesDao
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.asExecutor
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.TestCoroutineScope
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.test.setMain
-import kotlinx.coroutines.withContext
-import org.hamcrest.CoreMatchers.equalTo
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.ext.scope
-import java.util.concurrent.CountDownLatch
 
+@ExperimentalCoroutinesApi
 @RunWith(AndroidJUnit4::class)
 class RatesDaoTest {
 
@@ -52,28 +44,35 @@ class RatesDaoTest {
     @Test
     fun testInsertRatesToDatabase() = testScope.runBlockingTest {
         val baseCurrency = mockedRatesEur.baseCurrency
-        val currencyRatesFlow = ratesDao.getRatesByCurrency(baseCurrency).filterNotNull()
+        val observer = ratesDao.getRatesByCurrency(baseCurrency).filterNotNull().test(this)
 
-        currencyRatesFlow.test(this).assertNoValues().finish()
+        observer.assertNoValues()
 
         ratesDao.insertRates(mockedRatesEur)
 
-        currencyRatesFlow
-            .test(this)
-            .assertValues(mockedRatesEur)
-            .finish()
+        observer.assertValues(mockedRatesEur)
+        observer.assertNrOfItems(1)
+
+        observer.finish()
     }
 
     @Test
     fun testInsertNewRatesUpdatesTheDatabase() = testScope.runBlockingTest {
         val baseCurrency = mockedRatesEur.baseCurrency
-        val currencyRatesFlow = ratesDao.getRatesByCurrency(baseCurrency).filterNotNull()
+        val observer = ratesDao.getRatesByCurrency(baseCurrency).filterNotNull().test(this)
 
-        currencyRatesFlow.test(this).assertNoValues().finish()
+        observer.assertNoValues()
 
         ratesDao.insertRates(mockedRatesEur)
+
+        observer.assertNrOfItems(1)
+        observer.assertValues(mockedRatesEur)
+
         ratesDao.insertRates(mockedRatesEurSecond)
 
-        currencyRatesFlow.test(this).assertValues(mockedRatesEur, mockedRatesEurSecond).finish()
+        observer.assertNrOfItems(2)
+        observer.assertValues(mockedRatesEur, mockedRatesEurSecond)
+
+        observer.finish()
     }
 }

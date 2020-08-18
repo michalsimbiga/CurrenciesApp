@@ -26,7 +26,17 @@ class TestObserver<T>(
     }
 
     fun assertValues(vararg values: T): TestObserver<T> {
-        assert(this.values.containsAll(values.toList()))
+        assertEquals(values.toList(), this.values)
+        return this
+    }
+
+    fun assertValueIn(value: T): TestObserver<T> {
+        assertEquals(value, values.find { it == value })
+        return this
+    }
+
+    fun assertNrOfItems(nrOfItems: Int): TestObserver<T> {
+        assertEquals(nrOfItems, this.values.size)
         return this
     }
 
