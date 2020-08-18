@@ -26,7 +26,7 @@ object Versions {
     val instrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
     val buildToolsVersion = "29.0.2"
-    val kotlinCoroutines = "1.3.8"
+    val kotlinCoroutines = "1.3.9"
 
     val navigation = "2.3.0-alpha06"
     val appCompat = "1.1.0"
