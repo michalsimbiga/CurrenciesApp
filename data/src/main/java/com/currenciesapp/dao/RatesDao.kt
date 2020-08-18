@@ -11,8 +11,8 @@ import kotlinx.coroutines.flow.Flow
 interface RatesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertRates(ratesEntity: RatesEntity)
+    suspend fun insertRates(ratesEntity: RatesEntity)
 
     @Query("SELECT * FROM ratesentity WHERE baseCurrency LIKE :currencyCode")
-    fun getRatesByCurrency(currencyCode: String): Flow<RatesEntity>
+     fun getRatesByCurrency(currencyCode: String): Flow<RatesEntity>
 }

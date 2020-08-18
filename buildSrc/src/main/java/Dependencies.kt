@@ -52,6 +52,7 @@ object Versions {
 
     val junit = "4.12"
     val ext_junit = "1.1.1"
+    val espresso = "3.2.0"
     val mockk = "1.9.3"
     val assertjCore = "3.12.2"
     val threetenabp = "1.3.2"
@@ -122,9 +123,10 @@ object TestLibraries {
     val mockk = "io.mockk:mockk:${Versions.mockk}"
     val junit = "junit:junit:${Versions.junit}"
     val extJunit = "androidx.test.ext:junit:${Versions.ext_junit}"
+    val espresso = "androidx.test.espresso:espresso-core:${Versions.espresso}"
     val kotlinCoroutinesTest =
         "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlinCoroutines}"
     val threetenabp = "org.threeten:threetenbp:${Versions.threetenabp}"
     val koin = "org.koin:koin-test:${Versions.koinAndroidX}"
-
+    val roomTest =  "androidx.room:room-testing:${Versions.room}"
 }

@@ -14,6 +14,7 @@ android {
         targetSdkVersion Versions.targetSDK
         versionCode Releases.versionCode
         versionName Releases.versionName
+
         testInstrumentationRunner Versions.instrumentationRunner
     }
     buildTypes {
@@ -42,13 +43,15 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+    packagingOptions {
+        exclude 'META-INF/AL2.0'
+        exclude 'META-INF/LGPL2.1'
+    }
 }
 
 dependencies {
     implementation project(Modules.domain)
     implementation project(Modules.data)
-
-    debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
 
     implementation Libraries.kotlin
 
@@ -85,6 +88,9 @@ dependencies {
     testImplementation TestLibraries.mvrx
     testImplementation TestLibraries.kotlinCoroutinesTest
 
-    androidTestImplementation TestLibraries.koin
+    androidTestImplementation TestLibraries.junit
     androidTestImplementation TestLibraries.extJunit
+    androidTestImplementation TestLibraries.roomTest
+    androidTestImplementation TestLibraries.espresso
+    androidTestImplementation TestLibraries.kotlinCoroutinesTest
 }

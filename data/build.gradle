@@ -11,8 +11,6 @@ dependencies {
 
     implementation Libraries.threeTen
 
-    implementation 'com.google.code.gson:gson:2.8.6'
-
     implementation Libraries.room
     implementation Libraries.roomCoroutines
     kapt Libraries.roomAnnotationProcessor
