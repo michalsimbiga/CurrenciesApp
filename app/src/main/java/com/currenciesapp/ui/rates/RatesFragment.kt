@@ -18,8 +18,6 @@ class RatesFragment : BaseFragment() {
 
     private val viewModel: RatesViewModel by fragmentViewModel()
 
-    private lateinit var handler: Handler
-
     private val epoxyController: RatesEpoxyController by lazy {
         RatesEpoxyController(
             onCurrencyChangedCallback = ::onCurrencySelected,
@@ -51,7 +49,6 @@ class RatesFragment : BaseFragment() {
     }
 
     override fun invalidate() = withState(viewModel) { state ->
-        if (state.currencyList is Success) updateRecycler()
         if (state.currentRate is Success && state.currencyList is Success) updateRecycler()
     }
 
@@ -64,8 +61,6 @@ class RatesFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         epoxyController.onRestoreInstanceState(savedInstanceState)
         ratesRecycler.setController(epoxyController)
-
-        handler = Handler(Looper.getMainLooper())
 
         super.onViewCreated(view, savedInstanceState)
     }

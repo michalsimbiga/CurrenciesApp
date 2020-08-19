@@ -11,3 +11,6 @@ val String.Companion.comma
 
 val String.Companion.semicolon
     get() = ";"
+
+val String.Companion.colon
+    get() = ":"

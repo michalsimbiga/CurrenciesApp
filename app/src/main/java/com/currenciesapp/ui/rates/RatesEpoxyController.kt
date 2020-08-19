@@ -11,9 +11,6 @@ class RatesEpoxyController(
     private var onVolumeChangedCallback: ((Double) -> Unit)?
 ) : Typed2EpoxyController<RatesItem, Double>() {
 
-    private val _volume: MutableLiveData<Double> = MutableLiveData(1.0)
-    private val volume: LiveData<Double> = _volume
-
     override fun buildModels(
         currencyRates: RatesItem,
         volume: Double
