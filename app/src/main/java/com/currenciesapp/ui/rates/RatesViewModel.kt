@@ -2,7 +2,6 @@ package com.currenciesapp.ui.rates
 
 import androidx.lifecycle.viewModelScope
 import com.airbnb.mvrx.Success
-import com.currenciesapp.UPDATE_TIME_1_SEC
 import com.currenciesapp.common.ui.KoinMvRxViewModelFactory
 import com.currenciesapp.common.ui.MvRxViewModel
 import com.currenciesapp.model.Rates
@@ -12,7 +11,6 @@ import com.currenciesapp.useCase.GetRatesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
@@ -32,25 +30,20 @@ class RatesViewModel(
     private val coroutineContext: CoroutineContext
         get() = Dispatchers.Default + job
 
-    private val mainContext: CoroutineContext
-        get() = Dispatchers.Main + job
+    private val coroutineContextIo: CoroutineContext
+        get() = Dispatchers.IO + job
 
     private fun setNewRates(rates: Rates) {
         setState { copy(currencyList = Success(rates.toItem())) }
     }
 
-    private fun setFlowCollector(flow: Flow<Rates>) =
-        viewModelScope.launch(mainContext) {
-            flow.collect { setNewRates(it) }
-        }
-
-    fun updateRates() = withState { state ->
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun updateRates() = withState { state ->
+        viewModelScope.launch(coroutineContextIo) {
             while (true) {
                 getRatesUseCase.run(
                     params = GetRatesUseCase.Params(state.currentCurrency.invoke().toString())
                 )
-                delay(UPDATE_TIME_1_SEC)
+                delay(1500)
             }
         }
     }
@@ -61,7 +54,9 @@ class RatesViewModel(
                 GetRatesFlowUseCase.Params(state.currentCurrency.invoke() ?: return@launch)
             ).invoke() ?: return@launch
 
-            setFlowCollector(ratesFlow)
+            ratesFlow.collect {
+                setNewRates(it)
+            }
         }
     }
 
@@ -69,6 +64,7 @@ class RatesViewModel(
         copy(currentCurrency = Success(newCurrencyCode))
     }.also {
         recreateCoroutineContext()
+        updateRates()
         getRatesFlow()
     }
 
@@ -78,6 +74,12 @@ class RatesViewModel(
     }
 
     fun setNewRate(newRate: Double) = setState { copy(currentRate = Success(newRate)) }
+
+    override fun onCleared() {
+        job.cancel()
+
+        super.onCleared()
+    }
 
     companion object :
         KoinMvRxViewModelFactory<RatesViewModel, RatesViewState>(RatesViewModel::class)

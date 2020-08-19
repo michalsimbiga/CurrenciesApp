@@ -12,17 +12,19 @@ class CurrencyTypeConverter {
 
     @TypeConverter
     fun fromList(list: List<CurrencyEntity>): String = list.joinToString(
-        separator = String.semicolon,
-        transform = { currency -> currency.code + String.colon + currency.rate })
+        separator = String.colon,
+        transform = { currency -> "${currency.code},${currency.rate}" })
 
     @TypeConverter
     fun toList(string: String): List<CurrencyEntity> {
         val listOfObject = mutableListOf<CurrencyEntity>()
 
-        string.split(String.semicolon).forEach { str ->
-            val obj = str.split(String.colon)
+        string.split(String.colon).forEach { str ->
+            val obj = str.split(String.comma)
             listOfObject.add(CurrencyEntity(obj.first(), obj[1].toDouble()))
         }
+
         return listOfObject.toList()
+
     }
 }
